@@ -13,7 +13,7 @@
 
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body id="top">
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="site-header">
@@ -105,37 +105,35 @@
       <div class="container">
         <div class="section-head">
           <h2>Projects</h2>
-          <p>Replace these cards with your real links as you add repos and tools.</p>
+          <p>Search and filter projects. Edit <span class="mono">projects.json</span> to add new ones.</p>
         </div>
 
-        <div class="grid">
-          <article class="tile">
-            <h3>Starter Templates</h3>
-            <p>Minimal, clean templates for landing pages and docs.</p>
-            <div class="tile-actions">
-              <a class="link" href="#" aria-label="Starter Templates link (placeholder)">View</a>
-              <span class="pill">HTML</span>
-            </div>
-          </article>
+        <div class="projects-controls" aria-label="Project filters">
+          <div class="pc-row">
+            <label class="sr-only" for="projectSearch">Search projects</label>
+            <input id="projectSearch" class="field" type="search" placeholder="Search projects…" autocomplete="off" />
 
-          <article class="tile">
-            <h3>Tool Picks</h3>
-            <p>Curated free tools for productivity, security, and development.</p>
-            <div class="tile-actions">
-              <a class="link" href="#" aria-label="Tool Picks link (placeholder)">View</a>
-              <span class="pill">Guides</span>
-            </div>
-          </article>
+            <label class="sr-only" for="statusFilter">Filter by status</label>
+            <select id="statusFilter" class="select" aria-label="Filter by status">
+              <option value="all">All statuses</option>
+              <option value="stable">Stable</option>
+              <option value="in-progress">In progress</option>
+              <option value="planned">Planned</option>
+            </select>
 
-          <article class="tile">
-            <h3>Micro Utilities</h3>
-            <p>Tiny scripts and helpers you can use instantly.</p>
-            <div class="tile-actions">
-              <a class="link" href="#" aria-label="Micro Utilities link (placeholder)">View</a>
-              <span class="pill">JS</span>
-            </div>
-          </article>
+            <button id="clearFilters" class="btn" type="button">Clear</button>
+          </div>
+
+          <div class="pc-tags" id="tagFilters" aria-label="Filter by tag">
+            <button class="chip is-active" data-tag="all" type="button">All</button>
+          </div>
+
+          <div class="pc-meta">
+            <span id="projectsCount" class="muted" aria-live="polite"></span>
+          </div>
         </div>
+
+        <div id="projectsGrid" class="grid" aria-label="Project list"></div>
       </div>
     </section>
 
@@ -196,6 +194,18 @@
       <a class="link" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'}); return false;">Back to top</a>
     </div>
   </footer>
+
+  <div class="modal" id="projectModal" role="dialog" aria-modal="true" aria-labelledby="projectModalTitle" aria-hidden="true">
+    <div class="modal-backdrop" data-modal-close="true"></div>
+    <div class="modal-panel" role="document">
+      <div class="modal-head">
+        <div class="modal-title" id="projectModalTitle">Project</div>
+        <button class="icon-btn" id="modalClose" type="button" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body" id="projectModalBody"></div>
+      <div class="modal-actions" id="projectModalActions"></div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>

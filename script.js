@@ -1,5 +1,30 @@
 const THEME_KEY = 'bfs_theme';
 
+function escapeHtml(str) {
+  return String(str)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
+function normalizeTag(tag) {
+  return String(tag || '').trim();
+}
+
+function uniq(arr) {
+  return Array.from(new Set(arr));
+}
+
+function byStatusOrder(a, b) {
+  const order = { stable: 0, 'in-progress': 1, planned: 2 };
+  const av = order[a.status] ?? 99;
+  const bv = order[b.status] ?? 99;
+  if (av !== bv) return av - bv;
+  return String(a.name || '').localeCompare(String(b.name || ''));
+}
+
 function setTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   localStorage.setItem(THEME_KEY, theme);
@@ -35,6 +60,238 @@ function copyToClipboard(text) {
   document.execCommand('copy');
   document.body.removeChild(ta);
   return Promise.resolve();
+}
+
+function openModal() {
+  const modal = document.getElementById('projectModal');
+  if (!modal) return;
+  modal.classList.add('is-open');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+
+  const closeBtn = document.getElementById('modalClose');
+  if (closeBtn) closeBtn.focus();
+}
+
+function closeModal() {
+  const modal = document.getElementById('projectModal');
+  if (!modal) return;
+  modal.classList.remove('is-open');
+  modal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
+
+function renderProjectCard(project) {
+  const tags = Array.isArray(project.tags) ? project.tags : [];
+  const tagPills = tags
+    .slice(0, 4)
+    .map((t) => `<span class="pill">${escapeHtml(t)}</span>`)
+    .join('');
+
+  const status = project.status ? String(project.status) : 'unknown';
+
+  return `
+    <article class="project-card" data-project-id="${escapeHtml(project.id)}">
+      <div class="project-top">
+        <h3 class="project-name">${escapeHtml(project.name)}</h3>
+        <span class="badge">${escapeHtml(status)}</span>
+      </div>
+      <p class="project-desc">${escapeHtml(project.description || '')}</p>
+      <div class="tag-row" aria-label="Tags">${tagPills}</div>
+      <div class="project-actions">
+        <button class="btn small" type="button" data-action="details" data-project-id="${escapeHtml(project.id)}">Details</button>
+        <div>
+          ${project.repoUrl ? `<a class="link" href="${escapeHtml(project.repoUrl)}" target="_blank" rel="noreferrer">Repo</a>` : ''}
+          ${project.demoUrl ? ` <span class="sep" aria-hidden="true">·</span> <a class="link" href="${escapeHtml(project.demoUrl)}" target="_blank" rel="noreferrer">Demo</a>` : ''}
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function renderProjectModal(project) {
+  const title = document.getElementById('projectModalTitle');
+  const body = document.getElementById('projectModalBody');
+  const actions = document.getElementById('projectModalActions');
+  if (!title || !body || !actions) return;
+
+  title.textContent = project.name || 'Project';
+
+  const tags = Array.isArray(project.tags) ? project.tags : [];
+  const highlights = Array.isArray(project.highlights) ? project.highlights : [];
+
+  const tagsHtml = tags.length
+    ? `<div class="tag-row" aria-label="Tags">${tags.map((t) => `<span class="pill">${escapeHtml(t)}</span>`).join('')}</div>`
+    : '';
+
+  const highlightsHtml = highlights.length
+    ? `<div><div class="muted" style="margin-bottom:8px;">Highlights</div><ul style="margin:0; padding-left:18px;">${highlights
+        .slice(0, 8)
+        .map((h) => `<li>${escapeHtml(h)}</li>`)
+        .join('')}</ul></div>`
+    : '';
+
+  body.innerHTML = `
+    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:10px;">
+      <span class="badge">${escapeHtml(project.status || 'unknown')}</span>
+      <span class="mono">${escapeHtml(project.id || '')}</span>
+    </div>
+    <div style="margin-bottom:12px;">${escapeHtml(project.description || '')}</div>
+    ${tagsHtml}
+    ${highlightsHtml}
+  `;
+
+  const repoBtn = project.repoUrl
+    ? `<a class="btn" href="${escapeHtml(project.repoUrl)}" target="_blank" rel="noreferrer">Open repo</a>`
+    : '';
+  const demoBtn = project.demoUrl
+    ? `<a class="btn primary" href="${escapeHtml(project.demoUrl)}" target="_blank" rel="noreferrer">Open demo</a>`
+    : '';
+  const copyBtn = project.repoUrl
+    ? `<button class="btn" type="button" data-action="copy" data-copy="${escapeHtml(project.repoUrl)}">Copy repo URL</button>`
+    : '';
+
+  actions.innerHTML = `${demoBtn}${repoBtn}${copyBtn}`;
+}
+
+async function loadProjects() {
+  const res = await fetch('projects.json', { cache: 'no-store' });
+  if (!res.ok) throw new Error(`Failed to load projects.json (${res.status})`);
+  const data = await res.json();
+  if (!Array.isArray(data)) return [];
+  return data
+    .filter((p) => p && typeof p === 'object')
+    .map((p) => ({
+      id: p.id || '',
+      name: p.name || '',
+      description: p.description || '',
+      tags: Array.isArray(p.tags) ? p.tags.map(normalizeTag).filter(Boolean) : [],
+      status: p.status || 'unknown',
+      repoUrl: p.repoUrl || null,
+      demoUrl: p.demoUrl || null,
+      highlights: Array.isArray(p.highlights) ? p.highlights : []
+    }))
+    .sort(byStatusOrder);
+}
+
+function attachProjectsUI(projects) {
+  const grid = document.getElementById('projectsGrid');
+  const search = document.getElementById('projectSearch');
+  const status = document.getElementById('statusFilter');
+  const clear = document.getElementById('clearFilters');
+  const tagFilters = document.getElementById('tagFilters');
+  const count = document.getElementById('projectsCount');
+
+  if (!grid || !search || !status || !clear || !tagFilters || !count) return;
+
+  const allTags = uniq(
+    projects.flatMap((p) => (Array.isArray(p.tags) ? p.tags : []))
+  ).sort((a, b) => String(a).localeCompare(String(b)));
+
+  for (const tag of allTags) {
+    const btn = document.createElement('button');
+    btn.className = 'chip';
+    btn.type = 'button';
+    btn.dataset.tag = tag;
+    btn.textContent = tag;
+    tagFilters.appendChild(btn);
+  }
+
+  const state = {
+    q: '',
+    status: 'all',
+    tag: 'all'
+  };
+
+  function setActiveChip(tag) {
+    const chips = tagFilters.querySelectorAll('.chip');
+    chips.forEach((c) => c.classList.toggle('is-active', c.dataset.tag === tag));
+  }
+
+  function matches(project) {
+    const q = state.q.trim().toLowerCase();
+    if (q) {
+      const hay = `${project.name} ${project.description} ${(project.tags || []).join(' ')}`.toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+
+    if (state.status !== 'all' && String(project.status) !== state.status) return false;
+    if (state.tag !== 'all') {
+      const tags = Array.isArray(project.tags) ? project.tags : [];
+      if (!tags.includes(state.tag)) return false;
+    }
+
+    return true;
+  }
+
+  function render() {
+    const filtered = projects.filter(matches);
+    grid.innerHTML = filtered.map(renderProjectCard).join('');
+    count.textContent = `${filtered.length} / ${projects.length} shown`;
+  }
+
+  search.addEventListener('input', () => {
+    state.q = search.value;
+    render();
+  });
+
+  status.addEventListener('change', () => {
+    state.status = status.value;
+    render();
+  });
+
+  clear.addEventListener('click', () => {
+    state.q = '';
+    state.status = 'all';
+    state.tag = 'all';
+    search.value = '';
+    status.value = 'all';
+    setActiveChip('all');
+    render();
+  });
+
+  tagFilters.addEventListener('click', (e) => {
+    const btn = e.target && e.target.closest ? e.target.closest('button[data-tag]') : null;
+    if (!btn) return;
+    state.tag = btn.dataset.tag || 'all';
+    setActiveChip(state.tag);
+    render();
+  });
+
+  grid.addEventListener('click', (e) => {
+    const btn = e.target && e.target.closest ? e.target.closest('button[data-action="details"]') : null;
+    if (!btn) return;
+    const id = btn.dataset.projectId;
+    const project = projects.find((p) => p.id === id);
+    if (!project) return;
+    renderProjectModal(project);
+    openModal();
+  });
+
+  const modal = document.getElementById('projectModal');
+  const modalClose = document.getElementById('modalClose');
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      const closeTarget = e.target && e.target.closest ? e.target.closest('[data-modal-close="true"]') : null;
+      if (closeTarget) closeModal();
+
+      const copyBtn = e.target && e.target.closest ? e.target.closest('[data-action="copy"]') : null;
+      if (copyBtn && copyBtn.dataset.copy) {
+        copyToClipboard(copyBtn.dataset.copy).catch(() => {});
+      }
+    });
+  }
+
+  if (modalClose) modalClose.addEventListener('click', closeModal);
+
+  document.addEventListener('keydown', (e) => {
+    const isOpen = modal && modal.classList.contains('is-open');
+    if (!isOpen) return;
+    if (e.key === 'Escape') closeModal();
+  });
+
+  setActiveChip('all');
+  render();
 }
 
 (function init() {
@@ -81,4 +338,22 @@ function copyToClipboard(text) {
       }
     });
   }
+
+  loadProjects()
+    .then((projects) => {
+      attachProjectsUI(projects);
+    })
+    .catch(() => {
+      const grid = document.getElementById('projectsGrid');
+      const count = document.getElementById('projectsCount');
+      if (count) count.textContent = 'Projects failed to load.';
+      if (grid) {
+        grid.innerHTML = `
+          <article class="tile">
+            <h3>Couldn’t load projects</h3>
+            <p>Please ensure <span class="mono">projects.json</span> exists next to <span class="mono">index.html</span>.</p>
+          </article>
+        `;
+      }
+    });
 })();

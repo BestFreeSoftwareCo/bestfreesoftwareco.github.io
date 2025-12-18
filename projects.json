@@ -1,0 +1,44 @@
+[
+  {
+    "id": "bfs-starter-site",
+    "name": "GitHub Pages Starter Site",
+    "description": "A fast, modern starter you can clone and customize (this site).",
+    "tags": ["HTML", "CSS", "JavaScript"],
+    "status": "stable",
+    "repoUrl": "https://github.com/BestFreeSoftwareCo/bestfreesoftwareco.github.io",
+    "demoUrl": "https://bestfreesoftwareco.github.io",
+    "highlights": [
+      "No build step",
+      "Light/Dark mode",
+      "Projects driven from JSON"
+    ]
+  },
+  {
+    "id": "free-toolkit",
+    "name": "Free Software Toolkit",
+    "description": "Curated list of free tools with short, opinionated notes.",
+    "tags": ["Guides"],
+    "status": "in-progress",
+    "repoUrl": "https://github.com/BestFreeSoftwareCo",
+    "demoUrl": null,
+    "highlights": [
+      "Curated picks",
+      "Beginner-friendly",
+      "Security-minded"
+    ]
+  },
+  {
+    "id": "micro-utilities",
+    "name": "Micro Utilities",
+    "description": "Tiny utilities and scripts you can use instantly.",
+    "tags": ["JavaScript"],
+    "status": "planned",
+    "repoUrl": "https://github.com/BestFreeSoftwareCo",
+    "demoUrl": null,
+    "highlights": [
+      "Small + focused",
+      "Copy/paste friendly",
+      "Easy to maintain"
+    ]
+  }
+]
