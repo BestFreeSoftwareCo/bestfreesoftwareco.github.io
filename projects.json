@@ -1,44 +1,58 @@
 [
   {
-    "id": "bfs-starter-site",
-    "name": "GitHub Pages Starter Site",
-    "description": "A fast, modern starter you can clone and customize (this site).",
-    "tags": ["HTML", "CSS", "JavaScript"],
+    "id": "main-macro-installer",
+    "name": "Main Macro Installer",
+    "description": "One installer to set up and manage the macro suite.",
+    "tags": ["Installer", "Windows", "Macros"],
     "status": "stable",
-    "repoUrl": "https://github.com/BestFreeSoftwareCo/bestfreesoftwareco.github.io",
-    "demoUrl": "https://bestfreesoftwareco.github.io",
+    "repoUrl": "https://github.com/BestFreeSoftwareCo/Main-Macro-Installer",
+    "demoUrl": null,
     "highlights": [
-      "No build step",
-      "Light/Dark mode",
-      "Projects driven from JSON"
+      "Main installer for the whole suite",
+      "Simple setup",
+      "Keeps everything in one place"
     ]
   },
   {
-    "id": "free-toolkit",
-    "name": "Free Software Toolkit",
-    "description": "Curated list of free tools with short, opinionated notes.",
-    "tags": ["Guides"],
+    "id": "macro-creator",
+    "name": "Macro Creator",
+    "description": "Create and manage macros for the suite.",
+    "tags": ["Macros", "Tools"],
     "status": "in-progress",
-    "repoUrl": "https://github.com/BestFreeSoftwareCo",
+    "repoUrl": "https://github.com/BestFreeSoftwareCo/Macro-Creator",
     "demoUrl": null,
     "highlights": [
-      "Curated picks",
-      "Beginner-friendly",
-      "Security-minded"
+      "Build your own workflows",
+      "Designed to pair with the installer",
+      "Easy to extend"
     ]
   },
   {
-    "id": "micro-utilities",
-    "name": "Micro Utilities",
-    "description": "Tiny utilities and scripts you can use instantly.",
-    "tags": ["JavaScript"],
-    "status": "planned",
-    "repoUrl": "https://github.com/BestFreeSoftwareCo",
+    "id": "rivals-afk-macro",
+    "name": "Rivals AFK Macro",
+    "description": "AFK macro for Rivals.",
+    "tags": ["Macros", "Rivals"],
+    "status": "stable",
+    "repoUrl": "https://github.com/BestFreeSoftwareCo/Rivals-Afk-Macro",
     "demoUrl": null,
     "highlights": [
-      "Small + focused",
-      "Copy/paste friendly",
-      "Easy to maintain"
+      "Suite-compatible",
+      "Simple to set up",
+      "Runs with the installer"
+    ]
+  },
+  {
+    "id": "adopt-me-task-macro",
+    "name": "Adopt Me Task Macro",
+    "description": "Task automation macro for Adopt Me.",
+    "tags": ["Macros", "Adopt Me"],
+    "status": "stable",
+    "repoUrl": "https://github.com/BestFreeSoftwareCo/Adopt-Me-Task-Macro",
+    "demoUrl": null,
+    "highlights": [
+      "Suite-compatible",
+      "Task-focused",
+      "Easy to run"
     ]
   }
 ]

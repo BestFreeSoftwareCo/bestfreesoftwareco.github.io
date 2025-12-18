@@ -41,10 +41,6 @@ function getInitialTheme() {
   return prefersLight ? 'light' : 'dark';
 }
 
-function isValidEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email).trim());
-}
-
 function copyToClipboard(text) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
     return navigator.clipboard.writeText(text);
@@ -305,23 +301,6 @@ function attachProjectsUI(projects) {
     themeToggle.addEventListener('click', () => {
       const current = document.documentElement.getAttribute('data-theme') || 'dark';
       setTheme(current === 'dark' ? 'light' : 'dark');
-    });
-  }
-
-  const notifyBtn = document.getElementById('notifyBtn');
-  const emailInput = document.getElementById('email');
-  const notifyMsg = document.getElementById('notifyMsg');
-
-  if (notifyBtn && emailInput && notifyMsg) {
-    notifyBtn.addEventListener('click', () => {
-      const email = emailInput.value;
-      if (!isValidEmail(email)) {
-        notifyMsg.textContent = 'Please enter a valid email address.';
-        return;
-      }
-
-      notifyMsg.textContent = `Thanks! (Demo) We'll notify ${email} when updates are ready.`;
-      emailInput.value = '';
     });
   }
 
