@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>BestFreeSoftwareCo</title>
+  <meta name="description" content="BestFreeSoftwareCo — free software, tools, and resources." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand" aria-label="BestFreeSoftwareCo">
+        <div class="logo" aria-hidden="true">B</div>
+        <div class="brand-text">
+          <div class="brand-name">BestFreeSoftwareCo</div>
+          <div class="brand-tag">Free software. Clear recommendations.</div>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="#projects">Projects</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
+          <span class="theme-toggle-dot" aria-hidden="true"></span>
+          <span class="theme-toggle-text" id="themeToggleText">Dark</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-label="Intro">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <h1>Build better with free software.</h1>
+          <p class="lead">
+            Curated tools, lightweight guides, and practical resources — focused on what works.
+          </p>
+
+          <div class="hero-cta">
+            <a class="btn primary" href="#projects">View projects</a>
+            <a class="btn" href="#contact">Get in touch</a>
+          </div>
+
+          <div class="hero-stats" role="list" aria-label="Highlights">
+            <div class="stat" role="listitem">
+              <div class="stat-value">100% free</div>
+              <div class="stat-label">to host on GitHub Pages</div>
+            </div>
+            <div class="stat" role="listitem">
+              <div class="stat-value">Fast</div>
+              <div class="stat-label">no frameworks required</div>
+            </div>
+            <div class="stat" role="listitem">
+              <div class="stat-value">Clean</div>
+              <div class="stat-label">HTML/CSS/JS only</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-card" aria-label="Quick links">
+          <div class="card">
+            <div class="card-title">Start here</div>
+            <div class="card-body">
+              <div class="quick-links">
+                <a class="quick-link" href="#projects">
+                  <span class="ql-title">Projects</span>
+                  <span class="ql-sub">Templates and small tools</span>
+                </a>
+                <a class="quick-link" href="#about">
+                  <span class="ql-title">About</span>
+                  <span class="ql-sub">What this site is</span>
+                </a>
+                <a class="quick-link" href="#contact">
+                  <span class="ql-title">Contact</span>
+                  <span class="ql-sub">Email + social</span>
+                </a>
+              </div>
+
+              <div class="newsletter">
+                <label class="field-label" for="email">Get updates (demo)</label>
+                <div class="field-row">
+                  <input id="email" class="field" type="email" placeholder="you@example.com" autocomplete="email" />
+                  <button id="notifyBtn" class="btn primary" type="button">Notify me</button>
+                </div>
+                <div id="notifyMsg" class="field-hint" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Projects</h2>
+          <p>Replace these cards with your real links as you add repos and tools.</p>
+        </div>
+
+        <div class="grid">
+          <article class="tile">
+            <h3>Starter Templates</h3>
+            <p>Minimal, clean templates for landing pages and docs.</p>
+            <div class="tile-actions">
+              <a class="link" href="#" aria-label="Starter Templates link (placeholder)">View</a>
+              <span class="pill">HTML</span>
+            </div>
+          </article>
+
+          <article class="tile">
+            <h3>Tool Picks</h3>
+            <p>Curated free tools for productivity, security, and development.</p>
+            <div class="tile-actions">
+              <a class="link" href="#" aria-label="Tool Picks link (placeholder)">View</a>
+              <span class="pill">Guides</span>
+            </div>
+          </article>
+
+          <article class="tile">
+            <h3>Micro Utilities</h3>
+            <p>Tiny scripts and helpers you can use instantly.</p>
+            <div class="tile-actions">
+              <a class="link" href="#" aria-label="Micro Utilities link (placeholder)">View</a>
+              <span class="pill">JS</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section alt">
+      <div class="container two-col">
+        <div>
+          <h2>About</h2>
+          <p>
+            BestFreeSoftwareCo is a simple GitHub Pages site that you can expand over time.
+            It’s built with just HTML, CSS, and a tiny bit of JavaScript.
+          </p>
+          <p>
+            Want a multi-page site? You can add files like <span class="mono">about.html</span> and link them in the nav.
+          </p>
+        </div>
+
+        <div class="callout" role="note" aria-label="Tip">
+          <div class="callout-title">Tip</div>
+          <p class="callout-body">
+            Your GitHub Pages URL will be:
+            <span class="mono">https://bestfreesoftwareco.github.io</span>
+          </p>
+          <button id="copyUrl" class="btn" type="button">Copy URL</button>
+          <div id="copyMsg" class="field-hint" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Contact</h2>
+          <p>Update these links with your real contact details.</p>
+        </div>
+
+        <div class="contact">
+          <a class="contact-item" href="mailto:hello@example.com">
+            <span class="contact-title">Email</span>
+            <span class="contact-sub">hello@example.com</span>
+          </a>
+          <a class="contact-item" href="https://github.com/BestFreeSoftwareCo" target="_blank" rel="noreferrer">
+            <span class="contact-title">GitHub</span>
+            <span class="contact-sub">@BestFreeSoftwareCo</span>
+          </a>
+          <a class="contact-item" href="#" aria-label="Add your social link">
+            <span class="contact-title">Social</span>
+            <span class="contact-sub">Add a link</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span>© <span id="year"></span> BestFreeSoftwareCo</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <a class="link" href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'}); return false;">Back to top</a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
