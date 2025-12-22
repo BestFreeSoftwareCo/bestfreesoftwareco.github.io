@@ -927,6 +927,19 @@ a {
   flex-wrap: wrap;
 }
 
+.project-btns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.project-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
 .btn.small {
   padding: 8px 12px;
   font-size: 13px;
@@ -1303,7 +1316,7 @@ a {
 
 .faq {
   display: grid;
-  gap: 10px;
+  gap: 12px;
 }
 
 .faq-item {

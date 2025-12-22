@@ -210,13 +210,15 @@ function renderProjectCard(project) {
       <p class="project-desc">${escapeHtml(project.description || '')}</p>
       <div class="tag-row" aria-label="Tags">${tagPills}</div>
       <div class="project-actions">
-        <button class="btn small" type="button" data-action="details" data-project-id="${escapeHtml(project.id)}">Details</button>
-        <div>
+        <div class="project-btns">
+          <button class="btn small" type="button" data-action="details" data-project-id="${escapeHtml(project.id)}">Details</button>
+          <button class="btn ghost small" type="button" data-action="expand" data-project-id="${escapeHtml(project.id)}" aria-expanded="false">See more</button>
+        </div>
+        <div class="project-links">
           ${project.repoUrl ? `<a class="link" href="${escapeHtml(project.repoUrl)}" target="_blank" rel="noreferrer">Repo</a>` : ''}
           ${project.demoUrl ? ` <span class="sep" aria-hidden="true">·</span> <a class="link" href="${escapeHtml(project.demoUrl)}" target="_blank" rel="noreferrer">Demo</a>` : ''}
         </div>
       </div>
-      <button class="btn ghost small" type="button" data-action="expand" data-project-id="${escapeHtml(project.id)}" aria-expanded="false">See more</button>
       <div class="project-more" aria-hidden="true">
         <div class="project-more-meta">
           ${metaRows}
@@ -342,7 +344,7 @@ function mergeProjects(localProjects, repoProjects) {
   const map = new Map();
   localProjects.forEach((p) => map.set(p.id || p.name, p));
   repoProjects.forEach((repo) => {
-    const key = repo.id || repo.name;
+    const key = (repo.id || repo.name || '').toLowerCase();
     if (!map.has(key)) {
       map.set(key, repo);
     }
