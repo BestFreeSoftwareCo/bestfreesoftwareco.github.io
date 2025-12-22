@@ -436,6 +436,44 @@ function enableRevealAnimations() {
   elements.forEach((el) => observer.observe(el));
 }
 
+function enablePointerGlow() {
+  const targets = document.querySelectorAll(
+    [
+      '.btn',
+      '.chip',
+      '.project-card',
+      '.tile',
+      '.about-pane',
+      '.about-main',
+      '.installer-card',
+      '.adv-card',
+      '.contact-item',
+      '.meta-card',
+      '.point',
+      '.testi-card',
+      '.faq-item',
+      '.release-card'
+    ].join(', ')
+  );
+
+  const setPos = (el, event) => {
+    const rect = el.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * 100;
+    const y = ((event.clientY - rect.top) / rect.height) * 100;
+    el.style.setProperty('--mx', `${x}%`);
+    el.style.setProperty('--my', `${y}%`);
+  };
+
+  targets.forEach((el) => {
+    el.addEventListener('pointermove', (e) => setPos(el, e));
+    el.addEventListener('pointerenter', (e) => setPos(el, e));
+    el.addEventListener('pointerleave', () => {
+      el.style.removeProperty('--mx');
+      el.style.removeProperty('--my');
+    });
+  });
+}
+
 (function init() {
   document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -452,6 +490,7 @@ function enableRevealAnimations() {
 
   enableSmoothAnchors();
   enableRevealAnimations();
+  enablePointerGlow();
 
   loadProjects()
     .then((projects) => {
