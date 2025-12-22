@@ -127,6 +127,34 @@
       </div>
     </section>
 
+    <section id="release" class="section alt">
+      <div class="container release-grid">
+        <div class="release-card">
+          <div class="section-head">
+            <h2>Featured Release</h2>
+            <p>Latest update from the macro suite.</p>
+          </div>
+          <div class="release-body">
+            <div class="release-meta">
+              <div>
+                <div class="release-label">Version</div>
+                <div class="release-value" id="releaseVersion">—</div>
+              </div>
+              <div>
+                <div class="release-label">Published</div>
+                <div class="release-value" id="releaseDate">—</div>
+              </div>
+            </div>
+            <p id="releaseNotes" class="release-notes">Loading latest release…</p>
+          </div>
+          <div class="release-actions">
+            <a class="btn primary" id="releasePrimary" href="#" target="_blank" rel="noreferrer">Open release</a>
+            <a class="btn" id="releaseRepo" href="#" target="_blank" rel="noreferrer">Repo</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="how" class="section">
       <div class="container">
         <div class="section-head">
@@ -160,16 +188,39 @@
 
         <div class="projects-controls" aria-label="Project filters">
           <div class="pc-row">
-            <label class="sr-only" for="projectSearch">Search projects</label>
-            <input id="projectSearch" class="field" type="search" placeholder="Search projects…" autocomplete="off" />
+            <div class="pc-field">
+              <label class="sr-only" for="projectSearch">Search projects</label>
+              <input id="projectSearch" class="field" type="search" placeholder="Search projects…" autocomplete="off" />
+            </div>
 
-            <label class="sr-only" for="statusFilter">Filter by status</label>
-            <select id="statusFilter" class="select" aria-label="Filter by status">
-              <option value="all">All statuses</option>
-              <option value="stable">Stable</option>
-              <option value="in-progress">In progress</option>
-              <option value="planned">Planned</option>
-            </select>
+            <div class="pc-field">
+              <label class="sr-only" for="statusFilter">Filter by status</label>
+              <select id="statusFilter" class="select" aria-label="Filter by status">
+                <option value="all">All statuses</option>
+                <option value="stable">Stable</option>
+                <option value="in-progress">In progress</option>
+                <option value="planned">Planned</option>
+              </select>
+            </div>
+
+            <div class="pc-field">
+              <label class="sr-only" for="categoryFilter">Filter by category</label>
+              <select id="categoryFilter" class="select" aria-label="Filter by category">
+                <option value="all">All categories</option>
+                <option value="installer">Installer</option>
+                <option value="macro">Macros</option>
+                <option value="tool">Tools</option>
+              </select>
+            </div>
+
+            <div class="pc-field">
+              <label class="sr-only" for="sortProjects">Sort projects</label>
+              <select id="sortProjects" class="select" aria-label="Sort projects">
+                <option value="status">Sort: Status</option>
+                <option value="recent">Sort: Recently updated</option>
+                <option value="name">Sort: Name</option>
+              </select>
+            </div>
 
             <button id="clearFilters" class="btn" type="button">Clear</button>
           </div>
@@ -209,6 +260,17 @@
           <button id="copyUrl" class="btn" type="button">Copy URL</button>
           <div id="copyMsg" class="field-hint" aria-live="polite"></div>
         </div>
+      </div>
+    </section>
+
+    <section id="testimonials" class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Testimonials & usage notes</h2>
+          <p>Short notes from people using the macro suite.</p>
+        </div>
+
+        <div id="testimonialsGrid" class="testimonials"></div>
       </div>
     </section>
 

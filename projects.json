@@ -5,6 +5,9 @@
     "description": "One installer to set up and manage the macro suite.",
     "tags": ["Installer", "Windows", "Macros"],
     "status": "stable",
+    "category": "installer",
+    "version": "v2.3.0",
+    "lastUpdated": "2025-12-01",
     "repoUrl": "https://github.com/BestFreeSoftwareCo/Main-Macro-Installer",
     "demoUrl": null,
     "highlights": [
@@ -19,6 +22,9 @@
     "description": "Create and manage macros for the suite.",
     "tags": ["Macros", "Tools"],
     "status": "in-progress",
+    "category": "tool",
+    "version": "v0.9.0-beta",
+    "lastUpdated": "2025-11-10",
     "repoUrl": "https://github.com/BestFreeSoftwareCo/Macro-Creator",
     "demoUrl": null,
     "highlights": [
@@ -33,6 +39,9 @@
     "description": "AFK macro for Rivals.",
     "tags": ["Macros", "Rivals"],
     "status": "stable",
+    "category": "macro",
+    "version": "v1.4.2",
+    "lastUpdated": "2025-11-28",
     "repoUrl": "https://github.com/BestFreeSoftwareCo/Rivals-Afk-Macro",
     "demoUrl": null,
     "highlights": [
@@ -47,6 +56,9 @@
     "description": "Task automation macro for Adopt Me.",
     "tags": ["Macros", "Adopt Me"],
     "status": "stable",
+    "category": "macro",
+    "version": "v1.1.0",
+    "lastUpdated": "2025-10-22",
     "repoUrl": "https://github.com/BestFreeSoftwareCo/Adopt-Me-Task-Macro",
     "demoUrl": null,
     "highlights": [

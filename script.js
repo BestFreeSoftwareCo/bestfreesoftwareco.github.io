@@ -25,6 +25,40 @@ function byStatusOrder(a, b) {
   return String(a.name || '').localeCompare(String(b.name || ''));
 }
 
+function parseDateStr(dateStr) {
+  if (!dateStr) return null;
+  const date = new Date(dateStr);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function formatDate(dateStr) {
+  const date = parseDateStr(dateStr);
+  if (!date) return '—';
+  return date.toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+}
+
+const TESTIMONIALS = [
+  {
+    quote: 'The installer made it painless to get all the macros running on a new PC.',
+    author: 'Kai',
+    context: 'Macro tester'
+  },
+  {
+    quote: 'Macro Creator plus the installer is the combo I use for every Roblox alt.',
+    author: 'Nova',
+    context: 'Creator of workflows'
+  },
+  {
+    quote: 'Rivals AFK Macro fits right into the suite—just launch and let it run.',
+    author: 'Jett',
+    context: 'Rivals grinder'
+  }
+];
+
 function setTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   localStorage.setItem(THEME_KEY, theme);
@@ -85,12 +119,20 @@ function renderProjectCard(project) {
     .join('');
 
   const status = project.status ? String(project.status) : 'unknown';
+  const version = project.version ? `Version ${escapeHtml(project.version)}` : '';
+  const updated = project.lastUpdated ? `Updated ${formatDate(project.lastUpdated)}` : '';
+  const category = project.category ? `<span class="pill">${escapeHtml(project.category)}</span>` : '';
 
   return `
     <article class="project-card" data-project-id="${escapeHtml(project.id)}">
       <div class="project-top">
         <h3 class="project-name">${escapeHtml(project.name)}</h3>
         <span class="badge">${escapeHtml(status)}</span>
+      </div>
+      <div class="tag-row" aria-label="Meta">
+        ${category}
+        ${version ? `<span class="pill">${version}</span>` : ''}
+        ${updated ? `<span class="pill">${updated}</span>` : ''}
       </div>
       <p class="project-desc">${escapeHtml(project.description || '')}</p>
       <div class="tag-row" aria-label="Tags">${tagPills}</div>
@@ -130,9 +172,12 @@ function renderProjectModal(project) {
   body.innerHTML = `
     <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:10px;">
       <span class="badge">${escapeHtml(project.status || 'unknown')}</span>
+      ${project.category ? `<span class="pill">${escapeHtml(project.category)}</span>` : ''}
+      ${project.version ? `<span class="pill">Version ${escapeHtml(project.version)}</span>` : ''}
       <span class="mono">${escapeHtml(project.id || '')}</span>
     </div>
     <div style="margin-bottom:12px;">${escapeHtml(project.description || '')}</div>
+    ${project.lastUpdated ? `<div class="muted" style="margin-bottom:12px;">Last updated: ${formatDate(project.lastUpdated)}</div>` : ''}
     ${tagsHtml}
     ${highlightsHtml}
   `;
@@ -163,6 +208,9 @@ async function loadProjects() {
       description: p.description || '',
       tags: Array.isArray(p.tags) ? p.tags.map(normalizeTag).filter(Boolean) : [],
       status: p.status || 'unknown',
+      category: p.category || 'macro',
+      version: p.version || '',
+      lastUpdated: p.lastUpdated || '',
       repoUrl: p.repoUrl || null,
       demoUrl: p.demoUrl || null,
       highlights: Array.isArray(p.highlights) ? p.highlights : []
@@ -174,11 +222,13 @@ function attachProjectsUI(projects) {
   const grid = document.getElementById('projectsGrid');
   const search = document.getElementById('projectSearch');
   const status = document.getElementById('statusFilter');
+  const category = document.getElementById('categoryFilter');
+  const sortSelect = document.getElementById('sortProjects');
   const clear = document.getElementById('clearFilters');
   const tagFilters = document.getElementById('tagFilters');
   const count = document.getElementById('projectsCount');
 
-  if (!grid || !search || !status || !clear || !tagFilters || !count) return;
+  if (!grid || !search || !status || !clear || !tagFilters || !count || !category || !sortSelect) return;
 
   const allTags = uniq(
     projects.flatMap((p) => (Array.isArray(p.tags) ? p.tags : []))
@@ -196,7 +246,9 @@ function attachProjectsUI(projects) {
   const state = {
     q: '',
     status: 'all',
-    tag: 'all'
+    tag: 'all',
+    category: 'all',
+    sort: 'status'
   };
 
   function setActiveChip(tag) {
@@ -216,12 +268,28 @@ function attachProjectsUI(projects) {
       const tags = Array.isArray(project.tags) ? project.tags : [];
       if (!tags.includes(state.tag)) return false;
     }
+    if (state.category !== 'all' && String(project.category) !== state.category) return false;
 
     return true;
   }
 
+  function sortProjects(list) {
+    if (state.sort === 'recent') {
+      return [...list].sort((a, b) => {
+        const da = parseDateStr(b.lastUpdated) || 0;
+        const db = parseDateStr(a.lastUpdated) || 0;
+        return da - db;
+      });
+    }
+    if (state.sort === 'name') {
+      return [...list].sort((a, b) => a.name.localeCompare(b.name));
+    }
+    // default: status order
+    return [...list].sort(byStatusOrder);
+  }
+
   function render() {
-    const filtered = projects.filter(matches);
+    const filtered = sortProjects(projects.filter(matches));
     grid.innerHTML = filtered.map(renderProjectCard).join('');
     count.textContent = `${filtered.length} / ${projects.length} shown`;
   }
@@ -236,12 +304,26 @@ function attachProjectsUI(projects) {
     render();
   });
 
+  category.addEventListener('change', () => {
+    state.category = category.value;
+    render();
+  });
+
+  sortSelect.addEventListener('change', () => {
+    state.sort = sortSelect.value;
+    render();
+  });
+
   clear.addEventListener('click', () => {
     state.q = '';
     state.status = 'all';
     state.tag = 'all';
+    state.category = 'all';
+    state.sort = 'status';
     search.value = '';
     status.value = 'all';
+    category.value = 'all';
+    sortSelect.value = 'status';
     setActiveChip('all');
     render();
   });
@@ -290,6 +372,56 @@ function attachProjectsUI(projects) {
   render();
 }
 
+function renderFeaturedRelease(projects) {
+  const versionEl = document.getElementById('releaseVersion');
+  const dateEl = document.getElementById('releaseDate');
+  const notesEl = document.getElementById('releaseNotes');
+  const primaryBtn = document.getElementById('releasePrimary');
+  const repoBtn = document.getElementById('releaseRepo');
+  if (!versionEl || !dateEl || !notesEl || !primaryBtn || !repoBtn) return;
+
+  const installer = projects.find((p) => p.category === 'installer') || projects[0];
+  if (!installer) return;
+
+  versionEl.textContent = installer.version || installer.name;
+  dateEl.textContent = formatDate(installer.lastUpdated);
+  notesEl.textContent = installer.highlights?.join(' · ') || installer.description || 'Latest update available.';
+
+  const releaseUrl = installer.repoUrl ? `${installer.repoUrl}/releases/latest` : '#';
+  primaryBtn.href = releaseUrl;
+  repoBtn.href = installer.repoUrl || '#';
+}
+
+function renderTestimonials(items) {
+  const container = document.getElementById('testimonialsGrid');
+  if (!container) return;
+  container.innerHTML = items
+    .map(
+      (item) => `
+        <article class="testi-card">
+          <div class="testi-quote">“${escapeHtml(item.quote)}”</div>
+          <div class="testi-meta">${escapeHtml(item.author)} — ${escapeHtml(item.context)}</div>
+        </article>
+      `
+    )
+    .join('');
+}
+
+function enableSmoothAnchors() {
+  const links = document.querySelectorAll('a[href^="#"]');
+  links.forEach((link) => {
+    link.addEventListener('click', (event) => {
+      const hash = link.getAttribute('href');
+      if (!hash || hash === '#') return;
+      const target = document.querySelector(hash);
+      if (!target) return;
+
+      event.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+}
+
 (function init() {
   document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -318,9 +450,13 @@ function attachProjectsUI(projects) {
     });
   }
 
+  enableSmoothAnchors();
+
   loadProjects()
     .then((projects) => {
       attachProjectsUI(projects);
+      renderFeaturedRelease(projects);
+      renderTestimonials(TESTIMONIALS);
     })
     .catch(() => {
       const grid = document.getElementById('projectsGrid');
