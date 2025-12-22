@@ -65,10 +65,12 @@ body::before {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(1200px 700px at 15% 0%, rgba(39, 224, 163, 0.18), transparent 55%),
-    radial-gradient(900px 600px at 100% 10%, rgba(59, 180, 255, 0.16), transparent 55%),
-    radial-gradient(900px 600px at 20% 110%, rgba(59, 180, 255, 0.10), transparent 60%),
+    linear-gradient(180deg, rgba(39, 224, 163, 0.16), transparent 40%),
+    linear-gradient(180deg, rgba(59, 180, 255, 0.12) 20%, transparent 60%),
     linear-gradient(180deg, var(--bg), var(--bg2));
+  background-blend-mode: screen;
+  filter: blur(0.3px);
+  will-change: transform;
   z-index: -1;
   pointer-events: none;
 }
@@ -817,16 +819,6 @@ a {
   background: transparent;
   position: relative;
   overflow: hidden;
-}
-
-.section.alt::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.25));
-  opacity: 0.35;
-  z-index: -1;
-  pointer-events: none;
 }
 
 .section-head {
