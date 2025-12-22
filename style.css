@@ -53,7 +53,7 @@ html {
 
 body {
   margin: 0;
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--text);
   background:
     radial-gradient(1200px 700px at 15% 0%, rgba(39, 224, 163, 0.18), transparent 55%),
@@ -131,6 +131,7 @@ a {
 .brand-name {
   font-weight: 700;
   letter-spacing: -0.02em;
+  font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
 }
 
 .brand-tag {
@@ -254,6 +255,7 @@ a {
   line-height: 1.03;
   letter-spacing: -0.05em;
   margin: 0 0 14px;
+  font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
 }
 
 .lead {
@@ -528,17 +530,18 @@ a {
 }
 
 .projects-controls {
-  margin: 14px 0 16px;
-  padding: 14px;
+  margin: 24px auto 22px;
+  padding: 20px;
   border: 1px solid var(--border);
   border-radius: 16px;
   background: linear-gradient(180deg, var(--card), rgba(255, 255, 255, 0.03));
+  max-width: 940px;
 }
 
 .pc-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
   align-items: center;
 }
 
@@ -550,7 +553,7 @@ a {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  margin-top: 12px;
+  margin-top: 16px;
 }
 
 .chip {
@@ -581,7 +584,10 @@ a {
 }
 
 .pc-meta {
-  margin-top: 10px;
+  margin-top: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .project-card {
@@ -647,6 +653,7 @@ a {
   margin: 0 0 14px;
   color: var(--muted);
   line-height: 1.6;
+  font-size: 15px;
 }
 
 .tag-row {
@@ -812,6 +819,7 @@ a {
 .section-head h2 {
   margin: 0 0 8px;
   letter-spacing: -0.03em;
+  font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
 }
 
 .section-head p {
@@ -824,6 +832,12 @@ a {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
+}
+
+.projects-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+  margin-top: 18px;
 }
 
 .release-grid {
@@ -940,6 +954,99 @@ a {
   border-radius: 16px;
   border: 1px solid var(--border);
   background: linear-gradient(180deg, var(--card), rgba(255, 255, 255, 0.03));
+}
+
+.about-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 18px;
+}
+
+.about-main {
+  padding: 22px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(39, 224, 163, 0.15), rgba(59, 180, 255, 0.08));
+  box-shadow: var(--shadow);
+}
+
+.about-main h3 {
+  margin: 0 0 12px;
+  font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.about-main p {
+  margin: 0 0 14px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.about-list {
+  margin: 0 0 16px;
+  padding-left: 20px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.about-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.about-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+}
+
+.about-value {
+  font-size: 18px;
+  font-weight: 700;
+  margin-top: 6px;
+}
+
+.about-column {
+  display: grid;
+  gap: 14px;
+}
+
+.about-pane {
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.about-pane-title {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.about-pane-body {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.about-cta {
+  width: fit-content;
+}
+
+.about-pane.tip {
+  background: linear-gradient(180deg, var(--card2), rgba(255, 255, 255, 0.04));
 }
 
 .faq {
@@ -1140,6 +1247,18 @@ a {
 
   .two-col {
     grid-template-columns: 1fr;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-main {
+    order: 1;
+  }
+
+  .about-column {
+    order: 2;
   }
 
   .contact {

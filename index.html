@@ -9,7 +9,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -234,31 +234,70 @@
           </div>
         </div>
 
-        <div id="projectsGrid" class="grid" aria-label="Project list"></div>
+        <div id="projectsGrid" class="grid projects-grid" aria-label="Project list"></div>
       </div>
     </section>
 
     <section id="about" class="section alt reveal">
-      <div class="container two-col">
-        <div>
-          <h2>About</h2>
-          <p>
-            This website is the main hub for the BestFreeSoftwareCo Macro Suite.
-            Each project is linked below with clear descriptions and a single place to start.
-          </p>
-          <p>
-            New here? Start with <strong>Main Macro Installer</strong>, then browse the macro projects.
-          </p>
+      <div class="container about-wrap">
+        <div class="section-head">
+          <h2>About the suite</h2>
+          <p>The installer keeps every macro, update, and workflow in sync so you can launch faster.</p>
         </div>
 
-        <div class="callout" role="note" aria-label="Tip">
-          <div class="callout-title">Tip</div>
-          <p class="callout-body">
-            Your GitHub Pages URL will be:
-            <span class="mono">https://bestfreesoftwareco.github.io</span>
-          </p>
-          <button id="copyUrl" class="btn" type="button">Copy URL</button>
-          <div id="copyMsg" class="field-hint" aria-live="polite"></div>
+        <div class="about-grid">
+          <article class="about-main">
+            <h3>One installer, four macros, no guesswork</h3>
+            <p>
+              BestFreeSoftwareCo is a compact macro suite built for Roblox grind sessions.
+              Everything ships through a single installer so you always have the latest versions and a predictable setup.
+            </p>
+            <ul class="about-list">
+              <li>Curated macros (Rivals AFK, Adopt Me tasks, more in progress)</li>
+              <li>Macro Creator for tweaking workflows without touching scripts</li>
+              <li>Release notes + issues tracked publicly on GitHub</li>
+            </ul>
+            <div class="about-meta">
+              <div>
+                <div class="about-label">Projects</div>
+                <div class="about-value">4 live</div>
+              </div>
+              <div>
+                <div class="about-label">Updates</div>
+                <div class="about-value">Monthly cadence</div>
+              </div>
+              <div>
+                <div class="about-label">Platform</div>
+                <div class="about-value">Windows</div>
+              </div>
+            </div>
+          </article>
+
+          <div class="about-column">
+            <article class="about-pane">
+              <div class="about-pane-title">Starter flow</div>
+              <p class="about-pane-body">
+                Download the <strong>Main Macro Installer</strong>, pick the macros you want, and run them from a unified launcher.
+              </p>
+              <a class="btn primary about-cta" href="https://github.com/BestFreeSoftwareCo/Main-Macro-Installer" target="_blank" rel="noreferrer">Open installer repo</a>
+            </article>
+            <article class="about-pane">
+              <div class="about-pane-title">Support & updates</div>
+              <p class="about-pane-body">
+                Issues and feature requests live in each project’s GitHub tracker. Releases are tagged with detailed notes and changelogs.
+              </p>
+              <a class="link" href="https://github.com/BestFreeSoftwareCo?tab=repositories" target="_blank" rel="noreferrer">Browse all repositories</a>
+            </article>
+            <article class="about-pane tip" role="note" aria-label="Tip">
+              <div class="callout-title">Publish tip</div>
+              <p class="callout-body">
+                Your GitHub Pages URL will be:
+                <span class="mono">https://bestfreesoftwareco.github.io</span>
+              </p>
+              <button id="copyUrl" class="btn" type="button">Copy URL</button>
+              <div id="copyMsg" class="field-hint" aria-live="polite"></div>
+            </article>
+          </div>
         </div>
       </div>
     </section>
