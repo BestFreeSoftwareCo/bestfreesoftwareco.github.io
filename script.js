@@ -374,21 +374,6 @@ function renderFeaturedRelease(projects) {
   repoBtn.href = installer.repoUrl || '#';
 }
 
-function renderTestimonials(items) {
-  const container = document.getElementById('testimonialsGrid');
-  if (!container) return;
-  container.innerHTML = items
-    .map(
-      (item) => `
-        <article class="testi-card">
-          <div class="testi-quote">“${escapeHtml(item.quote)}”</div>
-          <div class="testi-meta">${escapeHtml(item.author)} — ${escapeHtml(item.context)}</div>
-        </article>
-      `
-    )
-    .join('');
-}
-
 function enableSmoothAnchors() {
   const links = document.querySelectorAll('a[href^="#"]');
   links.forEach((link) => {
@@ -436,26 +421,24 @@ function enableRevealAnimations() {
   elements.forEach((el) => observer.observe(el));
 }
 
-function enablePointerGlow() {
-  const targets = document.querySelectorAll(
-    [
-      '.btn',
-      '.chip',
-      '.project-card',
-      '.tile',
-      '.about-pane',
-      '.about-main',
-      '.installer-card',
-      '.adv-card',
-      '.contact-item',
-      '.meta-card',
-      '.point',
-      '.testi-card',
-      '.faq-item',
-      '.release-card'
-    ].join(', ')
-  );
+const POINTER_GLOW_SELECTOR = [
+  '.btn',
+  '.chip',
+  '.project-card',
+  '.tile',
+  '.about-pane',
+  '.about-main',
+  '.installer-card',
+  '.adv-card',
+  '.contact-item',
+  '.meta-card',
+  '.point',
+  '.testi-card',
+  '.faq-item',
+  '.release-card'
+].join(', ');
 
+function enablePointerGlow() {
   const setPos = (el, event) => {
     const rect = el.getBoundingClientRect();
     const x = ((event.clientX - rect.left) / rect.width) * 100;
@@ -464,14 +447,22 @@ function enablePointerGlow() {
     el.style.setProperty('--my', `${y}%`);
   };
 
-  targets.forEach((el) => {
-    el.addEventListener('pointermove', (e) => setPos(el, e));
-    el.addEventListener('pointerenter', (e) => setPos(el, e));
-    el.addEventListener('pointerleave', () => {
-      el.style.removeProperty('--mx');
-      el.style.removeProperty('--my');
-    });
+  document.addEventListener('pointermove', (event) => {
+    const target = event.target.closest(POINTER_GLOW_SELECTOR);
+    if (!target) return;
+    setPos(target, event);
   });
+
+  document.addEventListener(
+    'pointerout',
+    (event) => {
+      const target = event.target.closest(POINTER_GLOW_SELECTOR);
+      if (!target) return;
+      target.style.removeProperty('--mx');
+      target.style.removeProperty('--my');
+    },
+    true
+  );
 }
 
 (function init() {
@@ -496,7 +487,6 @@ function enablePointerGlow() {
     .then((projects) => {
       attachProjectsUI(projects);
       renderFeaturedRelease(projects);
-      renderTestimonials(TESTIMONIALS);
     })
     .catch(() => {
       const grid = document.getElementById('projectsGrid');
