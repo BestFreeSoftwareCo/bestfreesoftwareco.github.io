@@ -167,13 +167,31 @@ a {
   color: var(--muted);
   padding: 8px 10px;
   border-radius: 10px;
-  transition: color 160ms ease, background 160ms ease, transform 160ms ease;
+  position: relative;
+  transition: color 360ms ease, background 360ms ease, transform 420ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.nav a::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 4px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--hover-glow), transparent);
+  opacity: 0;
+  transition: opacity 360ms ease;
+  pointer-events: none;
 }
 
 .nav a:hover {
   color: var(--text);
-  background: var(--card);
-  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-3px);
+}
+
+.nav a:hover::after {
+  opacity: 1;
 }
 
 .theme-toggle {
@@ -368,9 +386,12 @@ a {
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
-  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), filter 160ms ease, box-shadow 200ms ease;
   position: relative;
   overflow: hidden;
+  transition:
+    transform 520ms cubic-bezier(0.19, 1, 0.22, 1),
+    box-shadow 520ms ease,
+    border-color 360ms ease;
 }
 
 .btn.primary {
@@ -379,19 +400,38 @@ a {
   box-shadow: var(--shadow);
 }
 
-.btn:hover {
-  filter: brightness(1.08);
-  transform: translateY(-2px);
-}
-
-.btn::after {
+.btn::after,
+.btn::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.btn::before {
+  background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.25), transparent 60%);
   opacity: 0;
-  transform: translateX(-30%);
-  transition: transform 280ms ease, opacity 280ms ease;
+  transform: translateX(-20%);
+  transition: opacity 520ms ease, transform 520ms ease;
+}
+
+.btn::after {
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  opacity: 0;
+  transform: translateX(-40%);
+  transition: transform 520ms ease, opacity 520ms ease;
+}
+
+.btn:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+}
+
+.btn:hover::before {
+  opacity: 0.5;
+  transform: translateX(0);
 }
 
 .btn:hover::after {
@@ -580,7 +620,9 @@ a {
   cursor: pointer;
   font-size: 13px;
   font-weight: 600;
-  transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease;
+  position: relative;
+  overflow: hidden;
+  transition: color 360ms ease, transform 420ms cubic-bezier(0.19, 1, 0.22, 1), box-shadow 360ms ease, border-color 360ms ease;
 }
 
 :root[data-theme="light"] .chip {
@@ -588,8 +630,23 @@ a {
 }
 
 .chip:hover {
-  filter: brightness(1.05);
-  transform: translateY(-1px);
+  color: var(--text);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.chip::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, var(--hover-glow), transparent 65%);
+  opacity: 0;
+  transition: opacity 420ms ease;
+  pointer-events: none;
+}
+
+.chip:hover::after {
+  opacity: 0.8;
 }
 
 .chip.is-active {
@@ -615,10 +672,10 @@ a {
   position: relative;
   overflow: hidden;
   transition:
-    transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 420ms ease,
-    border-color 320ms ease,
-    filter 420ms ease;
+    transform 520ms cubic-bezier(0.19, 1, 0.22, 1),
+    box-shadow 520ms ease,
+    border-color 360ms ease,
+    filter 520ms ease;
 }
 
 :is(
@@ -639,10 +696,10 @@ a {
   position: absolute;
   inset: -20%;
   border-radius: inherit;
-  background: radial-gradient(circle at 30% 20%, var(--hover-glow), transparent 60%);
+  background: radial-gradient(circle at 30% 20%, var(--hover-glow), transparent 65%);
   opacity: 0;
-  transform: scale(0.85);
-  transition: opacity 420ms ease, transform 420ms ease;
+  transform: scale(0.9);
+  transition: opacity 520ms ease, transform 520ms ease;
   pointer-events: none;
 }
 
@@ -660,9 +717,9 @@ a {
   .faq-item,
   .release-card
 ):hover {
-  transform: translateY(-6px) scale(1.01);
-  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.45);
-  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-3px) scale(1.004);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.32);
+  border-color: rgba(255, 255, 255, 0.14);
 }
 
 :is(
@@ -679,8 +736,8 @@ a {
   .faq-item,
   .release-card
 ):hover::before {
-  opacity: 0.8;
-  transform: scale(1.05);
+  opacity: 0.55;
+  transform: scale(1);
 }
 
 .pc-meta {
