@@ -715,6 +715,34 @@ function enablePointerGlow() {
     });
   }
 
+  const menuToggle = document.getElementById('menuToggle');
+  const primaryNav = document.getElementById('primaryNav');
+  if (menuToggle && primaryNav) {
+    const closeMenu = () => {
+      menuToggle.classList.remove('is-active');
+      primaryNav.classList.remove('is-open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    };
+
+    menuToggle.addEventListener('click', () => {
+      const isOpen = menuToggle.classList.toggle('is-active');
+      primaryNav.classList.toggle('is-open', isOpen);
+      menuToggle.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    primaryNav.addEventListener('click', (event) => {
+      if (window.matchMedia('(max-width: 720px)').matches && event.target.closest('a')) {
+        closeMenu();
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if (!window.matchMedia('(max-width: 720px)').matches) {
+        closeMenu();
+      }
+    });
+  }
+
   enableSmoothAnchors();
   enableRevealAnimations();
   enablePointerGlow();
