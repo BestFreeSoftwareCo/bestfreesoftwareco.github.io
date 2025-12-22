@@ -635,50 +635,30 @@ a {
 .chip {
   border: 1px solid var(--border);
   color: var(--muted);
-  padding: 8px 10px;
+  padding: 8px 12px;
   border-radius: 999px;
   cursor: pointer;
   font-size: 13px;
   font-weight: 600;
-  position: relative;
-  overflow: hidden;
-  --mx: 50%;
-  --my: 50%;
-  background-color: rgba(0, 0, 0, 0.10);
-  background-image: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(39, 224, 163, 0.18), transparent 60%);
-  background-blend-mode: screen;
-  transition: color 360ms ease, transform 420ms cubic-bezier(0.19, 1, 0.22, 1), box-shadow 360ms ease, border-color 360ms ease;
+  background-color: rgba(0, 0, 0, 0.18);
+  transition: color 240ms ease, transform 220ms ease, border-color 240ms ease, box-shadow 240ms ease;
 }
 
 :root[data-theme="light"] .chip {
-  background-color: rgba(255, 255, 255, 0.75);
+  background-color: rgba(255, 255, 255, 0.9);
 }
 
 .chip:hover {
   color: var(--text);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
-}
-
-.chip::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(39, 224, 163, 0.18), transparent 60%);
-  opacity: 0;
-  mix-blend-mode: screen;
-  transition: opacity 420ms ease;
-  pointer-events: none;
-}
-
-.chip:hover::after {
-  opacity: 0.8;
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
 }
 
 .chip.is-active {
   color: var(--text);
   border-color: rgba(124, 92, 255, 0.55);
-  box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.12);
+  box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.18);
 }
 
 :is(
