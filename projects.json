@@ -36,7 +36,7 @@
   {
     "id": "rivals-afk-macro",
     "name": "Rivals AFK Macro",
-    "description": "Keeps Rivals grinding while you’re away with safe idle handling and loop restarts.",
+    "description": "This Rivals AFK Macro is a safe, Python-based tool that simulates basic keyboard and mouse inputs to prevent AFK kicking. It is not a virus or malware, uses open-source readable code, has no exploits, injections, or memory editing, and follows Roblox and Rivals ToS by only automating normal inputs.",
     "tags": ["Macros", "Rivals"],
     "status": "stable",
     "category": "macro",
@@ -53,7 +53,7 @@
   {
     "id": "adopt-me-task-macro",
     "name": "Adopt Me Task Macro",
-    "description": "Automates Adopt Me daily tasks (needs, school, sleep) with pacing tuned for the suite.",
+    "description": "This Adopt Me Task Macro is a safe, Python-based tool that automates simple tasks using normal keyboard and mouse inputs. It is not a virus or malware, uses open-source readable code, has no exploits or injections, and follows Roblox ToS by not modifying the game or interfering with its systems.",
     "tags": ["Macros", "Adopt Me"],
     "status": "stable",
     "category": "macro",
@@ -65,6 +65,23 @@
       "Suite-compatible",
       "Task-focused",
       "Easy to run"
+    ]
+  },
+  {
+    "id": "forge-auto-mine",
+    "name": "Forge Macro — Auto Mine v1",
+    "description": "Automates Forge mining loops with safe, Python-based mouse and keyboard inputs. No exploits, injections, or memory editing—just repeatable movements that align with Roblox ToS.",
+    "tags": ["Macros", "Forge"],
+    "status": "in-progress",
+    "category": "macro",
+    "version": "v1.0.0",
+    "lastUpdated": "2025-12-22",
+    "repoUrl": "https://github.com/BestFreeSoftwareCo/Forge-Macro---Auto-Mine-v1-",
+    "demoUrl": null,
+    "highlights": [
+      "Auto-mines Forge nodes without AFK kicks",
+      "Readable, open-source Python",
+      "Pairs with the main installer"
     ]
   }
 ]
