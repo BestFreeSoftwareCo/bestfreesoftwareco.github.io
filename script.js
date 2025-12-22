@@ -172,6 +172,26 @@ function renderProjectCard(project) {
     .join('');
 
   const status = project.status ? String(project.status) : 'unknown';
+  const highlights = Array.isArray(project.highlights) ? project.highlights : [];
+  const highlightsHtml = highlights.length
+    ? `<ul class="project-more-list">${highlights.map((h) => `<li>${escapeHtml(h)}</li>`).join('')}</ul>`
+    : `<p class="project-more-empty">More details coming soon.</p>`;
+
+  const metaRows = `
+    <div>
+      <div class="project-more-label">Status</div>
+      <div class="project-more-value">${escapeHtml(status)}</div>
+    </div>
+    <div>
+      <div class="project-more-label">Version</div>
+      <div class="project-more-value">${escapeHtml(project.version || '—')}</div>
+    </div>
+    <div>
+      <div class="project-more-label">Updated</div>
+      <div class="project-more-value">${escapeHtml(project.lastUpdated ? formatDate(project.lastUpdated) : '—')}</div>
+    </div>
+  `;
+
   const version = project.version ? `Version ${escapeHtml(project.version)}` : '';
   const updated = project.lastUpdated ? `Updated ${formatDate(project.lastUpdated)}` : '';
   const category = project.category ? `<span class="pill">${escapeHtml(project.category)}</span>` : '';
@@ -194,6 +214,20 @@ function renderProjectCard(project) {
         <div>
           ${project.repoUrl ? `<a class="link" href="${escapeHtml(project.repoUrl)}" target="_blank" rel="noreferrer">Repo</a>` : ''}
           ${project.demoUrl ? ` <span class="sep" aria-hidden="true">·</span> <a class="link" href="${escapeHtml(project.demoUrl)}" target="_blank" rel="noreferrer">Demo</a>` : ''}
+        </div>
+      </div>
+      <button class="btn ghost small" type="button" data-action="expand" data-project-id="${escapeHtml(project.id)}" aria-expanded="false">See more</button>
+      <div class="project-more" aria-hidden="true">
+        <div class="project-more-meta">
+          ${metaRows}
+        </div>
+        <div class="project-more-body">
+          ${highlightsHtml}
+          ${
+            project.repoUrl
+              ? `<a class="link" href="${escapeHtml(project.repoUrl)}" target="_blank" rel="noreferrer">Open repository</a>`
+              : ''
+          }
         </div>
       </div>
     </article>
@@ -277,6 +311,50 @@ async function loadProjects() {
     console.warn('Falling back to embedded project data:', error);
     return shapeProjects(PROJECTS_FALLBACK);
   }
+}
+
+async function loadGithubRepos() {
+  try {
+    const res = await fetch('https://api.github.com/users/BestFreeSoftwareCo/repos?per_page=100');
+    if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
+    const repos = await res.json();
+    if (!Array.isArray(repos)) return [];
+    return repos.map((repo) => ({
+      id: repo.name || repo.full_name || '',
+      name: repo.name || 'Untitled repo',
+      description: repo.description || 'In development',
+      tags: ['GitHub'],
+      status: repo.archived ? 'archived' : repo.private ? 'private' : 'in-progress',
+      category: 'macro',
+      version: repo.default_branch ? `branch: ${repo.default_branch}` : '',
+      lastUpdated: repo.pushed_at || repo.updated_at || '',
+      repoUrl: repo.html_url || null,
+      demoUrl: null,
+      highlights: []
+    }));
+  } catch (error) {
+    console.warn('Unable to fetch GitHub repositories:', error);
+    return [];
+  }
+}
+
+function mergeProjects(localProjects, repoProjects) {
+  const map = new Map();
+  localProjects.forEach((p) => map.set(p.id || p.name, p));
+  repoProjects.forEach((repo) => {
+    const key = repo.id || repo.name;
+    if (!map.has(key)) {
+      map.set(key, repo);
+    }
+  });
+  return Array.from(map.values()).sort(byStatusOrder);
+}
+
+async function loadAllProjects() {
+  const [local, repos] = await Promise.allSettled([loadProjects(), loadGithubRepos()]);
+  const localProjects = local.status === 'fulfilled' ? local.value : shapeProjects(PROJECTS_FALLBACK);
+  const repoProjects = repos.status === 'fulfilled' ? repos.value : [];
+  return mergeProjects(localProjects, repoProjects);
 }
 
 function attachProjectsUI(projects) {
@@ -398,6 +476,19 @@ function attachProjectsUI(projects) {
   });
 
   grid.addEventListener('click', (e) => {
+    const expandBtn = e.target && e.target.closest ? e.target.closest('button[data-action="expand"]') : null;
+    if (expandBtn) {
+      const card = expandBtn.closest('.project-card');
+      const more = card ? card.querySelector('.project-more') : null;
+      if (card && more) {
+        const isOpen = card.classList.toggle('is-expanded');
+        more.setAttribute('aria-hidden', String(!isOpen));
+        expandBtn.setAttribute('aria-expanded', String(isOpen));
+        expandBtn.textContent = isOpen ? 'Hide details' : 'See more';
+      }
+      return;
+    }
+
     const btn = e.target && e.target.closest ? e.target.closest('button[data-action="details"]') : null;
     if (!btn) return;
     const id = btn.dataset.projectId;
@@ -561,7 +652,7 @@ function enablePointerGlow() {
   enableRevealAnimations();
   enablePointerGlow();
 
-  loadProjects()
+  loadAllProjects()
     .then((projects) => {
       attachProjectsUI(projects);
       renderFeaturedRelease(projects);
