@@ -1335,9 +1335,19 @@ a {
 }
 
 .faq-body {
-  padding: 0 14px 14px;
   color: var(--muted);
   line-height: 1.7;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  padding: 0 14px;
+  transition: max-height 300ms ease, opacity 240ms ease, padding 240ms ease;
+}
+
+.faq-item[open] .faq-body {
+  max-height: 400px;
+  opacity: 1;
+  padding: 0 14px 14px;
 }
 
 .callout-title {
@@ -1358,8 +1368,8 @@ a {
 
 .contact {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
 }
 
 .contact-item {
@@ -1368,6 +1378,7 @@ a {
   border: 1px solid var(--border);
   background: var(--card);
   transition: transform 200ms ease, box-shadow 200ms ease;
+  min-height: 130px;
 }
 
 .contact-item:hover {
@@ -1386,6 +1397,17 @@ a {
   margin-top: 8px;
   color: var(--muted);
   font-size: 13px;
+}
+
+.contact-links {
+  margin: 12px 0 0;
+  padding-left: 16px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.contact-links li + li {
+  margin-top: 4px;
 }
 
 .testimonials {

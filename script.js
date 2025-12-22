@@ -321,7 +321,9 @@ async function loadGithubRepos() {
     if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
     const repos = await res.json();
     if (!Array.isArray(repos)) return [];
-    return repos.map((repo) => ({
+    return repos
+      .filter((repo) => (repo.name || '').toLowerCase() !== 'bestfreesoftwareco.github.io')
+      .map((repo) => ({
       id: repo.name || repo.full_name || '',
       name: repo.name || 'Untitled repo',
       description: repo.description || 'In development',
@@ -481,13 +483,30 @@ function attachProjectsUI(projects) {
     const expandBtn = e.target && e.target.closest ? e.target.closest('button[data-action="expand"]') : null;
     if (expandBtn) {
       const card = expandBtn.closest('.project-card');
-      const more = card ? card.querySelector('.project-more') : null;
-      if (card && more) {
-        const isOpen = card.classList.toggle('is-expanded');
-        more.setAttribute('aria-hidden', String(!isOpen));
-        expandBtn.setAttribute('aria-expanded', String(isOpen));
-        expandBtn.textContent = isOpen ? 'Hide details' : 'See more';
+      if (!card) return;
+      const wasOpen = card.classList.contains('is-expanded');
+
+      document.querySelectorAll('.project-card.is-expanded').forEach((openCard) => {
+        openCard.classList.remove('is-expanded');
+        const btn = openCard.querySelector('button[data-action="expand"]');
+        const panel = openCard.querySelector('.project-more');
+        if (btn) {
+          btn.setAttribute('aria-expanded', 'false');
+          btn.textContent = 'See more';
+        }
+        if (panel) panel.setAttribute('aria-hidden', 'true');
+      });
+
+      if (!wasOpen) {
+        const panel = card.querySelector('.project-more');
+        card.classList.add('is-expanded');
+        if (expandBtn) {
+          expandBtn.setAttribute('aria-expanded', 'true');
+          expandBtn.textContent = 'Hide details';
+        }
+        if (panel) panel.setAttribute('aria-hidden', 'false');
       }
+
       return;
     }
 
