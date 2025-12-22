@@ -356,7 +356,7 @@ async function loadAllProjects() {
   return mergeProjects(localProjects, repoProjects);
 }
 
-function attachProjectsUI(projects) {
+function attachProjectsUI(allProjects) {
   const grid = document.getElementById('projectsGrid');
   const search = document.getElementById('projectSearch');
   const status = document.getElementById('statusFilter');
@@ -367,6 +367,10 @@ function attachProjectsUI(projects) {
   const count = document.getElementById('projectsCount');
 
   if (!grid || !search || !status || !clear || !tagFilters || !count || !category || !sortSelect) return;
+
+  const projects = allProjects.filter(
+    (project) => !shouldHideProject(project.id || project.name)
+  );
 
   const allTags = uniq(
     projects.flatMap((p) => (Array.isArray(p.tags) ? p.tags : []))
