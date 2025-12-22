@@ -56,7 +56,21 @@ body {
   font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--text);
   background-color: var(--bg);
-  min-height: 100%;
+  min-height: 100vh;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(1200px 700px at 15% 0%, rgba(39, 224, 163, 0.18), transparent 55%),
+    radial-gradient(900px 600px at 100% 10%, rgba(59, 180, 255, 0.16), transparent 55%),
+    radial-gradient(900px 600px at 20% 110%, rgba(59, 180, 255, 0.10), transparent 60%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  z-index: -1;
+  pointer-events: none;
 }
 
 a {
@@ -799,35 +813,20 @@ a {
   position: relative;
 }
 
-.section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.08));
-  opacity: 0.45;
-  pointer-events: none;
-  z-index: -2;
+.section.alt {
+  background: transparent;
+  position: relative;
+  overflow: hidden;
 }
 
 .section.alt::before {
-  background: linear-gradient(180deg, rgba(39, 224, 163, 0.08), rgba(59, 180, 255, 0.08));
-}
-
-.section::after {
   content: '';
   position: absolute;
-  left: 50%;
-  bottom: -1px;
-  transform: translateX(-50%);
-  width: 70%;
-  height: 1px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.15), transparent 70%);
+  inset: -1px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.25));
+  opacity: 0.35;
+  z-index: -1;
   pointer-events: none;
-  opacity: 0.5;
-}
-
-.section:last-of-type::after {
-  display: none;
 }
 
 .section-head {
