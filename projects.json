@@ -36,7 +36,7 @@
   {
     "id": "rivals-afk-macro",
     "name": "Rivals AFK Macro",
-    "description": "AFK macro for Rivals.",
+    "description": "Keeps Rivals grinding while you’re away with safe idle handling and loop restarts.",
     "tags": ["Macros", "Rivals"],
     "status": "stable",
     "category": "macro",
@@ -53,7 +53,7 @@
   {
     "id": "adopt-me-task-macro",
     "name": "Adopt Me Task Macro",
-    "description": "Task automation macro for Adopt Me.",
+    "description": "Automates Adopt Me daily tasks (needs, school, sleep) with pacing tuned for the suite.",
     "tags": ["Macros", "Adopt Me"],
     "status": "stable",
     "category": "macro",
