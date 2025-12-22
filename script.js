@@ -41,24 +41,6 @@ function formatDate(dateStr) {
   });
 }
 
-const TESTIMONIALS = [
-  {
-    quote: 'The installer made it painless to get all the macros running on a new PC.',
-    author: 'Kai',
-    context: 'Macro tester'
-  },
-  {
-    quote: 'Macro Creator plus the installer is the combo I use for every Roblox alt.',
-    author: 'Nova',
-    context: 'Creator of workflows'
-  },
-  {
-    quote: 'Rivals AFK Macro fits right into the suite—just launch and let it run.',
-    author: 'Jett',
-    context: 'Rivals grinder'
-  }
-];
-
 function setTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   localStorage.setItem(THEME_KEY, theme);
