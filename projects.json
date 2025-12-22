@@ -72,7 +72,7 @@
     "name": "Forge Macro — Auto Mine v1",
     "description": "Automates Forge mining loops with safe, Python-based mouse and keyboard inputs. No exploits, injections, or memory editing—just repeatable movements that align with Roblox ToS.",
     "tags": ["Macros", "Forge"],
-    "status": "in-progress",
+    "status": "stable",
     "category": "macro",
     "version": "v1.0.0",
     "lastUpdated": "2025-12-22",
