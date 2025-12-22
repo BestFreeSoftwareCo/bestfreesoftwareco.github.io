@@ -417,9 +417,41 @@ function enableSmoothAnchors() {
       if (!target) return;
 
       event.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (typeof target.scrollIntoView === 'function') {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+      }
     });
   });
+}
+
+function enableRevealAnimations() {
+  const elements = document.querySelectorAll('.reveal');
+  if (!elements.length) return;
+
+  const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!('IntersectionObserver' in window) || prefersReduced) {
+    elements.forEach((el) => el.classList.add('is-visible'));
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      rootMargin: '0px 0px -10% 0px',
+      threshold: 0.15
+    }
+  );
+
+  elements.forEach((el) => observer.observe(el));
 }
 
 (function init() {
@@ -451,6 +483,7 @@ function enableSmoothAnchors() {
   }
 
   enableSmoothAnchors();
+  enableRevealAnimations();
 
   loadProjects()
     .then((projects) => {

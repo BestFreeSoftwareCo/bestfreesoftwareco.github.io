@@ -9,6 +9,7 @@
   --faint: rgba(255, 255, 255, 0.55);
   --primary: #27e0a3;
   --primary2: #3bb4ff;
+  --accent: #9b7dff;
   --shadow: 0 20px 70px rgba(0, 0, 0, 0.42);
 }
 
@@ -23,6 +24,7 @@
   --faint: rgba(10, 20, 30, 0.52);
   --primary: #00b97a;
   --primary2: #1c7dff;
+  --accent: #7a63ff;
   --shadow: 0 14px 45px rgba(0, 0, 0, 0.10);
 }
 
@@ -46,6 +48,7 @@ html, body {
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 90px;
 }
 
 body {
@@ -186,7 +189,35 @@ a {
 }
 
 .hero {
+  position: relative;
   padding: 42px 0 18px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.hero::before,
+.hero::after {
+  content: '';
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(39, 224, 163, 0.25), transparent 70%);
+  filter: blur(10px);
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.hero::before {
+  top: -60px;
+  left: -120px;
+}
+
+.hero::after {
+  bottom: -120px;
+  right: -60px;
+  background: radial-gradient(circle, rgba(59, 180, 255, 0.25), transparent 68%);
 }
 
 .hero-grid {
@@ -320,7 +351,9 @@ a {
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
-  transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), filter 160ms ease, box-shadow 200ms ease;
+  position: relative;
+  overflow: hidden;
 }
 
 .btn.primary {
@@ -330,8 +363,23 @@ a {
 }
 
 .btn:hover {
-  filter: brightness(1.06);
-  transform: translateY(-1px);
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  opacity: 0;
+  transform: translateX(-30%);
+  transition: transform 280ms ease, opacity 280ms ease;
+}
+
+.btn:hover::after {
+  opacity: 1;
+  transform: translateX(60%);
 }
 
 
@@ -544,10 +592,28 @@ a {
   position: relative;
   overflow: hidden;
   transform: translateZ(0);
+  transition: border-color 200ms ease, transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 200ms ease;
+}
+
+.project-card::after {
+  content: '';
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(circle, rgba(39, 224, 163, 0.25), transparent 70%);
+  opacity: 0;
+  transition: opacity 250ms ease, transform 250ms ease;
+  transform: scale(0.6);
 }
 
 .project-card:hover {
-  filter: brightness(1.04);
+  border-color: rgba(39, 224, 163, 0.45);
+  box-shadow: 0 35px 60px rgba(0, 0, 0, 0.35);
+  transform: translateY(-3px);
+}
+
+.project-card:hover::after {
+  opacity: 0.9;
+  transform: scale(1);
 }
 
 .project-top {
@@ -726,6 +792,7 @@ a {
 
 .section {
   padding: 56px 0;
+  position: relative;
 }
 
 .section.alt {
@@ -963,7 +1030,7 @@ a {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  transition: transform 200ms ease, box-shadow 200ms ease;
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
 }
 
 .testi-quote {
@@ -977,18 +1044,30 @@ a {
 }
 
 .testi-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
+  transform: translateY(-4px);
+  border-color: rgba(59, 180, 255, 0.45);
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.35);
 }
 
 .footer {
   padding: 28px 0;
   border-top: 1px solid var(--border);
   background: rgba(0, 0, 0, 0.10);
+  position: relative;
+  overflow: hidden;
 }
 
 :root[data-theme="light"] .footer {
   background: rgba(10, 20, 30, 0.03);
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top, rgba(59, 180, 255, 0.2), transparent 60%);
+  opacity: 0.6;
+  pointer-events: none;
 }
 
 .footer-inner {
@@ -1003,6 +1082,39 @@ a {
 
 .sep {
   opacity: 0.5;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 600ms cubic-bezier(0.22, 1, 0.36, 1), transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .btn,
+  .project-card,
+  .tile,
+  .contact-item,
+  .meta-card,
+  .point {
+    transition: none;
+  }
+
+  .btn:hover::after,
+  .project-card::after {
+    display: none;
+  }
 }
 
 @media (max-width: 920px) {
