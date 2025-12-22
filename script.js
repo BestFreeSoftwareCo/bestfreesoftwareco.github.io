@@ -502,7 +502,6 @@ function enableRevealAnimations() {
 
 const POINTER_GLOW_SELECTOR = [
   '.btn',
-  '.chip',
   '.project-card',
   '.tile',
   '.about-pane',

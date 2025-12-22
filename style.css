@@ -664,8 +664,9 @@ a {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at var(--mx, 30%) var(--my, 30%), var(--hover-glow), transparent 65%);
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(39, 224, 163, 0.18), transparent 60%);
   opacity: 0;
+  mix-blend-mode: screen;
   transition: opacity 420ms ease;
   pointer-events: none;
 }
