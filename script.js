@@ -29,7 +29,8 @@ const PROJECTS_FALLBACK = [
   {
     id: 'rivals-afk-macro',
     name: 'Rivals AFK Macro',
-    description: 'AFK macro for Rivals.',
+    description:
+      'This Rivals AFK Macro is a safe, Python-based tool that simulates basic keyboard and mouse inputs to prevent AFK kicking. It is not a virus or malware, uses open-source readable code, has no exploits, injections, or memory editing, and follows Roblox and Rivals ToS by only automating normal inputs.',
     tags: ['Macros', 'Rivals'],
     status: 'stable',
     category: 'macro',
@@ -46,7 +47,8 @@ const PROJECTS_FALLBACK = [
   {
     id: 'adopt-me-task-macro',
     name: 'Adopt Me Task Macro',
-    description: 'Task automation macro for Adopt Me.',
+    description:
+      'This Adopt Me Task Macro is a safe, Python-based tool that automates simple tasks using normal keyboard and mouse inputs. It is not a virus or malware, uses open-source readable code, has no exploits or injections, and follows Roblox ToS by not modifying the game or interfering with its systems.',
     tags: ['Macros', 'Adopt Me'],
     status: 'stable',
     category: 'macro',
@@ -58,6 +60,24 @@ const PROJECTS_FALLBACK = [
       'Suite-compatible',
       'Task-focused',
       'Easy to run'
+    ]
+  },
+  {
+    id: 'forge-auto-mine',
+    name: 'Forge Macro — Auto Mine v1',
+    description:
+      'Automates Forge mining loops with safe, Python-based mouse and keyboard inputs. No exploits, injections, or memory editing—just repeatable movements that align with Roblox ToS.',
+    tags: ['Macros', 'Forge'],
+    status: 'stable',
+    category: 'macro',
+    version: 'v1.0.0',
+    lastUpdated: '2025-12-22',
+    repoUrl: 'https://github.com/BestFreeSoftwareCo/Forge-Macro---Auto-Mine-v1-',
+    demoUrl: null,
+    highlights: [
+      'Auto-mines Forge nodes without AFK kicks',
+      'Readable, open-source Python',
+      'Pairs with the main installer'
     ]
   }
 ];
@@ -165,7 +185,10 @@ function renderProjectCard(project) {
   const status = project.status ? String(project.status) : 'unknown';
   const highlights = Array.isArray(project.highlights) ? project.highlights : [];
   const highlightsHtml = highlights.length
-    ? `<ul class="project-more-list">${highlights.map((h) => `<li>${escapeHtml(h)}</li>`).join('')}</ul>`
+    ? `<div class="project-more-section">
+        <div class="project-more-label muted">Highlights</div>
+        <ul class="project-more-list">${highlights.map((h) => `<li>${escapeHtml(h)}</li>`).join('')}</ul>
+      </div>`
     : `<p class="project-more-empty">More details coming soon.</p>`;
 
   const metaRows = `
@@ -211,16 +234,21 @@ function renderProjectCard(project) {
         </div>
       </div>
       <div class="project-more" aria-hidden="true">
-        <div class="project-more-meta">
-          ${metaRows}
-        </div>
-        <div class="project-more-body">
-          ${highlightsHtml}
-          ${
-            project.repoUrl
-              ? `<a class="link" href="${escapeHtml(project.repoUrl)}" target="_blank" rel="noreferrer">Open repository</a>`
-              : ''
-          }
+        <div class="project-more-grid">
+          <div class="project-more-meta">
+            ${metaRows}
+          </div>
+          <div class="project-more-body">
+            <p class="project-more-desc">${escapeHtml(project.description || 'More info coming soon.')}</p>
+            ${highlightsHtml}
+            ${
+              project.repoUrl
+                ? `<a class="project-more-link" href="${escapeHtml(
+                    project.repoUrl
+                  )}/releases/latest" target="_blank" rel="noreferrer">View latest release notes →</a>`
+                : ''
+            }
+          </div>
         </div>
       </div>
     </article>
@@ -545,19 +573,38 @@ function attachProjectsUI(allProjects) {
 }
 
 function renderFeaturedRelease(projects) {
+  const nameEl = document.getElementById('releaseName');
+  const badgeEl = document.getElementById('releaseBadge');
   const versionEl = document.getElementById('releaseVersion');
   const dateEl = document.getElementById('releaseDate');
   const notesEl = document.getElementById('releaseNotes');
+  const highlightsEl = document.getElementById('releaseHighlights');
   const primaryBtn = document.getElementById('releasePrimary');
   const repoBtn = document.getElementById('releaseRepo');
-  if (!versionEl || !dateEl || !notesEl || !primaryBtn || !repoBtn) return;
+  if (!nameEl || !badgeEl || !versionEl || !dateEl || !notesEl || !highlightsEl || !primaryBtn || !repoBtn) return;
 
   const installer = projects.find((p) => p.category === 'installer') || projects[0];
   if (!installer) return;
 
+  nameEl.textContent = installer.name || 'Featured release';
   versionEl.textContent = installer.version || installer.name;
   dateEl.textContent = formatDate(installer.lastUpdated);
-  notesEl.textContent = installer.highlights?.join(' · ') || installer.description || 'Latest update available.';
+  notesEl.textContent = installer.description || 'Latest update available.';
+
+  const badgeText = (() => {
+    const updatedDate = parseDateStr(installer.lastUpdated);
+    if (!updatedDate) return 'Stable';
+    const diffDays = (Date.now() - updatedDate.getTime()) / (1000 * 60 * 60 * 24);
+    if (diffDays <= 7) return 'New';
+    if (diffDays <= 21) return 'Updated';
+    return 'Stable';
+  })();
+  badgeEl.textContent = badgeText;
+
+  const highlightItems = Array.isArray(installer.highlights) && installer.highlights.length
+    ? installer.highlights.slice(0, 3).map((item) => `<li>${escapeHtml(item)}</li>`).join('')
+    : '<li>Installer keeps all macros in sync.</li>';
+  highlightsEl.innerHTML = highlightItems;
 
   const releaseUrl = installer.repoUrl ? `${installer.repoUrl}/releases/latest` : '#';
   primaryBtn.href = releaseUrl;

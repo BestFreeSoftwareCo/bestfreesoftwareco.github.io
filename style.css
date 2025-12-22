@@ -835,8 +835,6 @@ a {
   margin-top: 12px;
   border-top: 1px dashed rgba(255, 255, 255, 0.1);
   padding-top: 12px;
-  display: grid;
-  gap: 12px;
   opacity: 0;
   max-height: 0;
   overflow: hidden;
@@ -846,6 +844,18 @@ a {
 .project-card.is-expanded .project-more {
   opacity: 1;
   max-height: 500px;
+}
+
+.project-more-grid {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 18px;
+}
+
+@media (max-width: 640px) {
+  .project-more-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .project-more-meta {
@@ -865,6 +875,17 @@ a {
   font-weight: 600;
 }
 
+.project-more-body {
+  display: grid;
+  gap: 12px;
+}
+
+.project-more-desc {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
 .project-more-list {
   margin: 0;
   padding-left: 18px;
@@ -872,10 +893,25 @@ a {
   line-height: 1.6;
 }
 
+.project-more-section {
+  display: grid;
+  gap: 6px;
+}
+
 .project-more-empty {
   margin: 0;
   color: var(--muted);
   font-style: italic;
+}
+
+.project-more-link {
+  font-weight: 600;
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.project-more-link:hover {
+  text-decoration: underline;
 }
 
 .project-top {
@@ -1114,14 +1150,43 @@ a {
   padding: 18px;
   border-radius: 18px;
   border: 1px solid var(--border);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
   box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
 }
 
-.release-body {
-  margin-top: 6px;
-  padding: 12px 0;
-  border-top: 1px solid var(--border);
+.release-headline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.release-project {
+  color: var(--text);
+}
+
+.release-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  background: linear-gradient(135deg, rgba(39, 224, 163, 0.3), rgba(59, 180, 255, 0.2));
+  color: var(--text);
+}
+
+.release-label {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   border-bottom: 1px solid var(--border);
 }
 
@@ -1132,26 +1197,26 @@ a {
   margin-bottom: 12px;
 }
 
-.release-label {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--muted);
-}
-
 .release-value {
   font-size: 20px;
   font-weight: 800;
 }
 
 .release-notes {
-  margin: 0;
+  margin-top: 12px;
   color: var(--muted);
-  line-height: 1.7;
+  line-height: 1.6;
+}
+
+.release-list {
+  margin: 12px 0 0 0;
+  padding-left: 18px;
+  color: var(--muted);
+  line-height: 1.6;
 }
 
 .release-actions {
-  margin-top: 12px;
+  margin-top: 14px;
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
@@ -1332,6 +1397,31 @@ a {
   padding: 14px 14px;
   font-weight: 800;
   letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  list-style: none;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-chevron {
+  display: inline-flex;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: transform 240ms ease;
+}
+
+.faq-item[open] .faq-chevron {
+  transform: rotate(90deg);
 }
 
 .faq-body {
@@ -1379,6 +1469,7 @@ a {
   background: var(--card);
   transition: transform 200ms ease, box-shadow 200ms ease;
   min-height: 130px;
+  position: relative;
 }
 
 .contact-item:hover {
@@ -1408,6 +1499,18 @@ a {
 
 .contact-links li + li {
   margin-top: 4px;
+}
+
+.contact-item--primary {
+  background: radial-gradient(circle at top, rgba(39, 224, 163, 0.3), rgba(59, 180, 255, 0.08));
+  border-color: rgba(39, 224, 163, 0.35);
+  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.35);
+}
+
+.contact-item--links {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .testimonials {
