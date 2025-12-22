@@ -1,5 +1,13 @@
 const THEME_KEY = 'bfs_theme';
 
+const PROJECT_HIDE = [
+  'macro-creator',
+  'bestfreesoftwareco',
+  'bestfreesoftwareco.github.io'
+];
+const PROJECT_HIDE_SET = new Set(PROJECT_HIDE.map((id) => id.toLowerCase()));
+const shouldHideProject = (id = '') => PROJECT_HIDE_SET.has(String(id).toLowerCase());
+
 const PROJECTS_FALLBACK = [
   {
     id: 'main-macro-installer',
@@ -16,23 +24,6 @@ const PROJECTS_FALLBACK = [
       'Main installer for the whole suite',
       'Simple setup',
       'Keeps everything in one place'
-    ]
-  },
-  {
-    id: 'macro-creator',
-    name: 'Macro Creator',
-    description: 'Create and manage macros for the suite.',
-    tags: ['Macros', 'Tools'],
-    status: 'in-progress',
-    category: 'tool',
-    version: 'v0.9.0-beta',
-    lastUpdated: '2025-11-10',
-    repoUrl: 'https://github.com/BestFreeSoftwareCo/Macro-Creator',
-    demoUrl: null,
-    highlights: [
-      'Build your own workflows',
-      'Designed to pair with the installer',
-      'Easy to extend'
     ]
   },
   {
@@ -286,7 +277,7 @@ function renderProjectModal(project) {
 
 function shapeProjects(data) {
   return (Array.isArray(data) ? data : PROJECTS_FALLBACK)
-    .filter((p) => p && typeof p === 'object')
+    .filter((p) => p && typeof p === 'object' && !shouldHideProject(p.id || p.name))
     .map((p) => ({
       id: p.id || '',
       name: p.name || '',
@@ -322,7 +313,7 @@ async function loadGithubRepos() {
     const repos = await res.json();
     if (!Array.isArray(repos)) return [];
     return repos
-      .filter((repo) => (repo.name || '').toLowerCase() !== 'bestfreesoftwareco.github.io')
+      .filter((repo) => !shouldHideProject(repo.name || repo.full_name))
       .map((repo) => ({
       id: repo.name || repo.full_name || '',
       name: repo.name || 'Untitled repo',
@@ -344,8 +335,12 @@ async function loadGithubRepos() {
 
 function mergeProjects(localProjects, repoProjects) {
   const map = new Map();
-  localProjects.forEach((p) => map.set(p.id || p.name, p));
+  localProjects.forEach((p) => {
+    if (shouldHideProject(p.id || p.name)) return;
+    map.set((p.id || p.name || '').toLowerCase(), p);
+  });
   repoProjects.forEach((repo) => {
+    if (shouldHideProject(repo.id || repo.name)) return;
     const key = (repo.id || repo.name || '').toLowerCase();
     if (!map.has(key)) {
       map.set(key, repo);

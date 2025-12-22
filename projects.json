@@ -19,7 +19,7 @@
   {
     "id": "macro-creator",
     "name": "Macro Creator",
-    "description": "Create and manage macros for the suite.",
+    "description": "Build your own macros with a visual editor that exports configs for the installer.",
     "tags": ["Macros", "Tools"],
     "status": "in-progress",
     "category": "tool",
