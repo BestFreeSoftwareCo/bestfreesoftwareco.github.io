@@ -19,10 +19,10 @@
   <header class="site-header">
     <div class="container header-inner">
       <div class="brand" aria-label="BestFreeSoftwareCo">
-        <div class="logo" aria-hidden="true">B</div>
+        <div class="logo" aria-hidden="true">BFS</div>
         <div class="brand-text">
           <div class="brand-name">BestFreeSoftwareCo</div>
-          <div class="brand-tag">Macro suite projects + installer</div>
+          <div class="brand-tag">Macro Suite</div>
         </div>
       </div>
 
@@ -40,58 +40,98 @@
 
   <main id="main">
     <section class="hero" aria-label="Intro">
-      <div class="container hero-inner">
-        <div class="hero-copy">
-          <h1>Macros, tools, and an installer that ties it together.</h1>
+      <div class="container hero-grid">
+        <div class="hero-left">
+          <p class="eyebrow">BestFreeSoftwareCo</p>
+          <h1>Install one thing. Run any macro.</h1>
           <p class="lead">
-            This is the home for my macro suite projects. Start with the Main Macro Installer, then pick the macros you want.
+            A small macro suite with a main installer that helps you set up, update, and launch macros from one place.
           </p>
 
           <div class="hero-cta">
-            <a class="btn primary" href="#projects">View projects</a>
-            <a class="btn" href="#contact">Support / contact</a>
+            <a class="btn primary" href="https://github.com/BestFreeSoftwareCo/Main-Macro-Installer" target="_blank" rel="noreferrer">Get the installer</a>
+            <a class="btn" href="#projects">Browse macros</a>
           </div>
 
-          <div class="hero-stats" role="list" aria-label="Highlights">
-            <div class="stat" role="listitem">
-              <div class="stat-value">Suite</div>
-              <div class="stat-label">one installer + multiple macros</div>
+          <div class="hero-points" role="list" aria-label="What you get">
+            <div class="point" role="listitem">
+              <div class="point-title">Simple setup</div>
+              <div class="point-sub">Clear links, quick install, minimal steps.</div>
             </div>
-            <div class="stat" role="listitem">
-              <div class="stat-value">Simple</div>
-              <div class="stat-label">quick setup + clear links</div>
+            <div class="point" role="listitem">
+              <div class="point-title">One suite</div>
+              <div class="point-sub">Installer + multiple macros + tools.</div>
             </div>
-            <div class="stat" role="listitem">
-              <div class="stat-value">Open</div>
-              <div class="stat-label">projects hosted on GitHub</div>
+            <div class="point" role="listitem">
+              <div class="point-title">GitHub hosted</div>
+              <div class="point-sub">Repos, releases, and issues in one place.</div>
             </div>
           </div>
         </div>
 
-        <div class="hero-card" aria-label="Quick links">
-          <div class="card">
-            <div class="card-title">Quick links</div>
-            <div class="card-body">
-              <div class="quick-links">
-                <a class="quick-link" href="#projects">
-                  <span class="ql-title">Projects</span>
-                  <span class="ql-sub">Installer + macros + tools</span>
-                </a>
-                <a class="quick-link" href="https://github.com/BestFreeSoftwareCo/Main-Macro-Installer" target="_blank" rel="noreferrer">
-                  <span class="ql-title">Main Macro Installer</span>
-                  <span class="ql-sub">Start here</span>
-                </a>
-                <a class="quick-link" href="#about">
-                  <span class="ql-title">About</span>
-                  <span class="ql-sub">What I build here</span>
-                </a>
-                <a class="quick-link" href="#contact">
-                  <span class="ql-title">Contact</span>
-                  <span class="ql-sub">GitHub + support</span>
-                </a>
+        <aside class="hero-right" aria-label="Installer overview">
+          <div class="installer-card">
+            <div class="installer-head">
+              <div>
+                <div class="installer-title">Main Macro Installer</div>
+                <div class="installer-sub">Recommended starting point</div>
+              </div>
+              <span class="badge">Windows</span>
+            </div>
+
+            <div class="steps" role="list" aria-label="How it works">
+              <div class="step" role="listitem">
+                <div class="step-n">1</div>
+                <div class="step-body">
+                  <div class="step-title">Install</div>
+                  <div class="step-sub">Download from GitHub and set it up.</div>
+                </div>
+              </div>
+              <div class="step" role="listitem">
+                <div class="step-n">2</div>
+                <div class="step-body">
+                  <div class="step-title">Choose macros</div>
+                  <div class="step-sub">Pick the macros you want to use.</div>
+                </div>
+              </div>
+              <div class="step" role="listitem">
+                <div class="step-n">3</div>
+                <div class="step-body">
+                  <div class="step-title">Run</div>
+                  <div class="step-sub">Launch from one place and keep updated.</div>
+                </div>
               </div>
             </div>
+
+            <div class="installer-actions">
+              <a class="btn primary" href="https://github.com/BestFreeSoftwareCo/Main-Macro-Installer" target="_blank" rel="noreferrer">Open repo</a>
+              <a class="btn" href="#faq">FAQ</a>
+            </div>
           </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="how" class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>How it works</h2>
+          <p>A quick overview of how the suite is structured.</p>
+        </div>
+
+        <div class="grid how-grid">
+          <article class="tile">
+            <h3>Installer</h3>
+            <p>The starting point. One place to find, install, and launch suite tools.</p>
+          </article>
+          <article class="tile">
+            <h3>Macros</h3>
+            <p>Each macro is its own project, with its own repo and updates.</p>
+          </article>
+          <article class="tile">
+            <h3>Tools</h3>
+            <p>Extra utilities like Macro Creator to manage or build workflows.</p>
+          </article>
         </div>
       </div>
     </section>
@@ -137,11 +177,11 @@
         <div>
           <h2>About</h2>
           <p>
-            BestFreeSoftwareCo is my project hub for a small macro suite.
-            The goal is simple: easy installs, clear project pages, and one place to find everything.
+            This website is the main hub for the BestFreeSoftwareCo Macro Suite.
+            Each project is linked below with clear descriptions and a single place to start.
           </p>
           <p>
-            If you’re new here, check the Projects section and start with <strong>Main Macro Installer</strong>.
+            New here? Start with <strong>Main Macro Installer</strong>, then browse the macro projects.
           </p>
         </div>
 
@@ -177,6 +217,36 @@
             <span class="contact-title">All Repos</span>
             <span class="contact-sub">Browse everything</span>
           </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="section alt">
+      <div class="container">
+        <div class="section-head">
+          <h2>FAQ</h2>
+          <p>Quick answers and links.</p>
+        </div>
+
+        <div class="faq">
+          <details class="faq-item">
+            <summary>Where do I start?</summary>
+            <div class="faq-body">
+              Start with the <a class="link" href="https://github.com/BestFreeSoftwareCo/Main-Macro-Installer" target="_blank" rel="noreferrer">Main Macro Installer</a>, then pick the macros you want from the Projects section.
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Where do I report issues?</summary>
+            <div class="faq-body">
+              Use the Issues tab on the relevant repository. Each project has its own issue tracker.
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary>Can I see all projects at once?</summary>
+            <div class="faq-body">
+              Yes — visit <a class="link" href="https://github.com/BestFreeSoftwareCo?tab=repositories" target="_blank" rel="noreferrer">All repositories</a>.
+            </div>
+          </details>
         </div>
       </div>
     </section>
