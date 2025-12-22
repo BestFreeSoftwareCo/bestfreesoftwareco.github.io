@@ -1,5 +1,76 @@
 const THEME_KEY = 'bfs_theme';
 
+const PROJECTS_FALLBACK = [
+  {
+    id: 'main-macro-installer',
+    name: 'Main Macro Installer',
+    description: 'One installer to set up and manage the macro suite.',
+    tags: ['Installer', 'Windows', 'Macros'],
+    status: 'stable',
+    category: 'installer',
+    version: 'v2.3.0',
+    lastUpdated: '2025-12-01',
+    repoUrl: 'https://github.com/BestFreeSoftwareCo/Main-Macro-Installer',
+    demoUrl: null,
+    highlights: [
+      'Main installer for the whole suite',
+      'Simple setup',
+      'Keeps everything in one place'
+    ]
+  },
+  {
+    id: 'macro-creator',
+    name: 'Macro Creator',
+    description: 'Create and manage macros for the suite.',
+    tags: ['Macros', 'Tools'],
+    status: 'in-progress',
+    category: 'tool',
+    version: 'v0.9.0-beta',
+    lastUpdated: '2025-11-10',
+    repoUrl: 'https://github.com/BestFreeSoftwareCo/Macro-Creator',
+    demoUrl: null,
+    highlights: [
+      'Build your own workflows',
+      'Designed to pair with the installer',
+      'Easy to extend'
+    ]
+  },
+  {
+    id: 'rivals-afk-macro',
+    name: 'Rivals AFK Macro',
+    description: 'AFK macro for Rivals.',
+    tags: ['Macros', 'Rivals'],
+    status: 'stable',
+    category: 'macro',
+    version: 'v1.4.2',
+    lastUpdated: '2025-11-28',
+    repoUrl: 'https://github.com/BestFreeSoftwareCo/Rivals-Afk-Macro',
+    demoUrl: null,
+    highlights: [
+      'Suite-compatible',
+      'Simple to set up',
+      'Runs with the installer'
+    ]
+  },
+  {
+    id: 'adopt-me-task-macro',
+    name: 'Adopt Me Task Macro',
+    description: 'Task automation macro for Adopt Me.',
+    tags: ['Macros', 'Adopt Me'],
+    status: 'stable',
+    category: 'macro',
+    version: 'v1.1.0',
+    lastUpdated: '2025-10-22',
+    repoUrl: 'https://github.com/BestFreeSoftwareCo/Adopt-Me-Task-Macro',
+    demoUrl: null,
+    highlights: [
+      'Suite-compatible',
+      'Task-focused',
+      'Easy to run'
+    ]
+  }
+];
+
 function escapeHtml(str) {
   return String(str)
     .replaceAll('&', '&amp;')
@@ -177,12 +248,8 @@ function renderProjectModal(project) {
   actions.innerHTML = `${demoBtn}${repoBtn}${copyBtn}`;
 }
 
-async function loadProjects() {
-  const res = await fetch('projects.json', { cache: 'no-store' });
-  if (!res.ok) throw new Error(`Failed to load projects.json (${res.status})`);
-  const data = await res.json();
-  if (!Array.isArray(data)) return [];
-  return data
+function shapeProjects(data) {
+  return (Array.isArray(data) ? data : PROJECTS_FALLBACK)
     .filter((p) => p && typeof p === 'object')
     .map((p) => ({
       id: p.id || '',
@@ -198,6 +265,18 @@ async function loadProjects() {
       highlights: Array.isArray(p.highlights) ? p.highlights : []
     }))
     .sort(byStatusOrder);
+}
+
+async function loadProjects() {
+  try {
+    const res = await fetch('projects.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error(`Failed to load projects.json (${res.status})`);
+    const data = await res.json();
+    return shapeProjects(data);
+  } catch (error) {
+    console.warn('Falling back to embedded project data:', error);
+    return shapeProjects(PROJECTS_FALLBACK);
+  }
 }
 
 function attachProjectsUI(projects) {
