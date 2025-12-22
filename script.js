@@ -450,20 +450,6 @@ function enableRevealAnimations() {
     });
   }
 
-  const copyBtn = document.getElementById('copyUrl');
-  const copyMsg = document.getElementById('copyMsg');
-  if (copyBtn && copyMsg) {
-    copyBtn.addEventListener('click', async () => {
-      const url = 'https://bestfreesoftwareco.github.io';
-      try {
-        await copyToClipboard(url);
-        copyMsg.textContent = 'Copied!';
-      } catch {
-        copyMsg.textContent = 'Copy failed. You can manually copy the URL.';
-      }
-    });
-  }
-
   enableSmoothAnchors();
   enableRevealAnimations();
 
