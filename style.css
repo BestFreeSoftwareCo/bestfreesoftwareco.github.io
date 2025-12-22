@@ -381,7 +381,6 @@ a {
   padding: 10px 14px;
   border-radius: 12px;
   border: 1px solid var(--border);
-  background: var(--card);
   color: var(--text);
   font-weight: 600;
   font-size: 14px;
@@ -390,6 +389,9 @@ a {
   overflow: hidden;
   --mx: 50%;
   --my: 50%;
+  background-color: var(--card);
+  background-image: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(39, 224, 163, 0.16), transparent 60%);
+  background-blend-mode: screen;
   transition:
     transform 520ms cubic-bezier(0.19, 1, 0.22, 1),
     box-shadow 520ms ease,
@@ -398,7 +400,10 @@ a {
 
 .btn.primary {
   border-color: transparent;
-  background: linear-gradient(135deg, var(--primary), var(--primary2));
+  background-image:
+    radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.18), transparent 65%),
+    linear-gradient(135deg, var(--primary), var(--primary2));
+  background-blend-mode: screen, normal;
   box-shadow: var(--shadow);
 }
 
@@ -615,7 +620,6 @@ a {
 
 .chip {
   border: 1px solid var(--border);
-  background: rgba(0, 0, 0, 0.10);
   color: var(--muted);
   padding: 8px 10px;
   border-radius: 999px;
@@ -626,11 +630,14 @@ a {
   overflow: hidden;
   --mx: 50%;
   --my: 50%;
+  background-color: rgba(0, 0, 0, 0.10);
+  background-image: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(39, 224, 163, 0.18), transparent 60%);
+  background-blend-mode: screen;
   transition: color 360ms ease, transform 420ms cubic-bezier(0.19, 1, 0.22, 1), box-shadow 360ms ease, border-color 360ms ease;
 }
 
 :root[data-theme="light"] .chip {
-  background: rgba(255, 255, 255, 0.75);
+  background-color: rgba(255, 255, 255, 0.75);
 }
 
 .chip:hover {
@@ -722,6 +729,31 @@ a {
   .testi-card,
   .faq-item,
   .release-card
+)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(59, 180, 255, 0.16), transparent 70%);
+  opacity: 0;
+  mix-blend-mode: screen;
+  transition: opacity 520ms ease;
+  pointer-events: none;
+}
+
+:is(
+  .project-card,
+  .tile,
+  .about-pane,
+  .about-main,
+  .installer-card,
+  .adv-card,
+  .contact-item,
+  .meta-card,
+  .point,
+  .testi-card,
+  .faq-item,
+  .release-card
 ):hover {
   transform: translateY(-3px) scale(1.004);
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.32);
@@ -744,6 +776,23 @@ a {
 ):hover::before {
   opacity: 0.55;
   transform: scale(1);
+}
+
+:is(
+  .project-card,
+  .tile,
+  .about-pane,
+  .about-main,
+  .installer-card,
+  .adv-card,
+  .contact-item,
+  .meta-card,
+  .point,
+  .testi-card,
+  .faq-item,
+  .release-card
+):hover::after {
+  opacity: 0.65;
 }
 
 .pc-meta {
