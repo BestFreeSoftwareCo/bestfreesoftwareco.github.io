@@ -25,6 +25,19 @@
 <body id="top">
   <a class="skip-link" href="#main">Skip to content</a>
 
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <div class="announcement" id="announcement" role="status" aria-live="polite">
+    <div class="announcement-content">
+      <span class="announcement-pill">Release</span>
+      <span class="announcement-text">Forge Auto-Mine v1 shipped with the new route scheduler.</span>
+      <a class="announcement-link" href="https://github.com/BestFreeSoftwareCo/Forge-Macro---Auto-Mine-v1-/releases/latest" target="_blank" rel="noreferrer">
+        See highlights →
+      </a>
+    </div>
+    <button class="announcement-close" id="announcementClose" type="button" aria-label="Dismiss announcement">×</button>
+  </div>
+
   <header class="site-header">
     <div class="container header-inner">
       <div class="brand" aria-label="BestFreeSoftwareCo">
@@ -213,7 +226,20 @@
           <p>Search and filter the suite. Projects auto-load locally and update when <span class="mono">projects.json</span> is available.</p>
         </div>
 
-        <div class="projects-controls" aria-label="Project filters">
+        <div class="projects-toolbar">
+          <div class="projects-summary">
+            <span class="projects-summary-label">Suite catalog</span>
+            <span id="projectsCount" class="projects-count" aria-live="polite">Loading…</span>
+          </div>
+          <div class="projects-quick">
+            <button class="filters-toggle" id="filtersToggle" type="button" aria-expanded="true" aria-controls="projectsFilters">
+              Hide filters
+            </button>
+            <button id="clearFilters" class="btn ghost" type="button">Clear</button>
+          </div>
+        </div>
+
+        <div id="projectsFilters" class="projects-controls" aria-label="Project filters">
           <div class="pc-row">
             <div class="pc-field">
               <label class="sr-only" for="projectSearch">Search projects</label>
@@ -248,18 +274,14 @@
                 <option value="name">Sort: Name</option>
               </select>
             </div>
-
-            <button id="clearFilters" class="btn" type="button">Clear</button>
           </div>
 
           <div class="pc-tags" id="tagFilters" aria-label="Filter by tag">
             <button class="chip is-active" data-tag="all" type="button">All</button>
           </div>
-
-          <div class="pc-meta">
-            <span id="projectsCount" class="muted" aria-live="polite"></span>
-          </div>
         </div>
+
+        <div class="projects-toast" id="projectsToast" role="status" aria-live="polite"></div>
 
         <div id="projectsGrid" class="grid projects-grid" aria-label="Project list"></div>
       </div>
@@ -363,84 +385,95 @@
       <div class="container">
         <div class="section-head">
           <h2>Contact</h2>
-          <p>Where to get releases, talk through issues, and see what’s shipping next.</p>
+          <p>Reach out where we actually respond — Discord for chat, GitHub for issues, YouTube for walkthroughs.</p>
         </div>
 
-        <div class="contact-grid">
-          <article class="contact-card contact-card--highlight">
-            <span class="contact-tag">Community hub</span>
-            <h3>Join the Discord</h3>
-            <p>Release pings, troubleshooting threads, and quick chats with the people building the macros.</p>
+        <div class="contact-layout">
+          <article class="contact-panel contact-panel--primary">
+            <p class="contact-eyebrow">Need support fast?</p>
+            <h3>Discord is the help desk</h3>
+            <p class="contact-lead">
+              Release alerts, pinned fixes, and live troubleshooting happen on the server. Join once and keep every macro conversation in one place.
+            </p>
+            <div class="contact-badges">
+              <div class="contact-badge">
+                <span class="contact-badge-label">Status feeds</span>
+                <span class="contact-badge-value">#release-feed · #status-board</span>
+              </div>
+              <div class="contact-badge">
+                <span class="contact-badge-label">Typical response</span>
+                <span class="contact-badge-value">Under 24h</span>
+              </div>
+            </div>
             <div class="contact-actions">
-              <a class="btn" href="https://discord.gg/498tyUUaBw" target="_blank" rel="noreferrer">Open Discord</a>
+              <a class="btn primary" href="https://discord.gg/498tyUUaBw" target="_blank" rel="noreferrer">Join Discord</a>
               <a class="btn ghost" href="https://github.com/BestFreeSoftwareCo/Main-Macro-Installer" target="_blank" rel="noreferrer">Installer repo</a>
             </div>
-            <dl class="contact-meta">
-              <div>
-                <dt>Live updates</dt>
-                <dd>#release-feed · #status-board</dd>
-              </div>
-              <div>
-                <dt>Response time</dt>
-                <dd>Usually under a day</dd>
-              </div>
-            </dl>
-          </article>
-
-          <article class="contact-card">
-            <span class="contact-tag">GitHub</span>
-            <h3>Repos & trackers</h3>
-            <ul class="contact-links">
-              <li>
-                <a href="https://github.com/BestFreeSoftwareCo" target="_blank" rel="noreferrer">
-                  <span>Organization profile</span>
-                  <span class="contact-link-sub">@BestFreeSoftwareCo</span>
-                </a>
-              </li>
-              <li>
-                <a href="https://github.com/BestFreeSoftwareCo/Main-Macro-Installer" target="_blank" rel="noreferrer">
-                  <span>Main Macro Installer</span>
-                  <span class="contact-link-sub">Launcher + updater</span>
-                </a>
-              </li>
-              <li>
-                <a href="https://github.com/BestFreeSoftwareCo?tab=repositories" target="_blank" rel="noreferrer">
-                  <span>All repositories</span>
-                  <span class="contact-link-sub">Browse every macro</span>
-                </a>
-              </li>
+            <ul class="contact-bullets">
+              <li>Open a support thread with macro + version.</li>
+              <li>Drop logs/screenshots so we can reproduce.</li>
+              <li>We file GitHub issues for anything that needs a patch.</li>
             </ul>
           </article>
 
-          <article class="contact-card">
-            <span class="contact-tag">Platforms</span>
-            <h3>Other channels</h3>
-            <ul class="contact-links">
-              <li>
-                <a href="https://www.youtube.com/@j3_ddd" target="_blank" rel="noreferrer">
-                  <span>YouTube</span>
-                  <span class="contact-link-sub">@j3_ddd</span>
-                </a>
-              </li>
-              <li>
-                <a href="https://bestfreesoftwareco.github.io/" target="_blank" rel="noreferrer">
-                  <span>Website</span>
-                  <span class="contact-link-sub">bestfreesoftwareco.github.io</span>
-                </a>
-              </li>
-            </ul>
-          </article>
+          <div class="contact-stack">
+            <article class="contact-tile">
+              <span class="contact-tag">GitHub</span>
+              <h4>Trackers & repos</h4>
+              <p>Everything is public — issues, releases, and nightly experiments.</p>
+              <ul class="contact-links">
+                <li>
+                  <a href="https://github.com/BestFreeSoftwareCo" target="_blank" rel="noreferrer">
+                    <span class="contact-link-main">Organization profile</span>
+                    <span class="contact-link-sub">@BestFreeSoftwareCo</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://github.com/BestFreeSoftwareCo/Main-Macro-Installer" target="_blank" rel="noreferrer">
+                    <span class="contact-link-main">Main Macro Installer</span>
+                    <span class="contact-link-sub">Launcher + updater</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://github.com/BestFreeSoftwareCo?tab=repositories" target="_blank" rel="noreferrer">
+                    <span class="contact-link-main">All repositories</span>
+                    <span class="contact-link-sub">Browse every macro</span>
+                  </a>
+                </li>
+              </ul>
+            </article>
 
-          <article class="contact-card contact-card--support">
-            <span class="contact-tag">Support flow</span>
-            <h3>Need help?</h3>
-            <ol class="contact-steps">
-              <li>Join the Discord and open a support thread with your macro + version.</li>
-              <li>Attach logs or screenshots so we can reproduce quickly.</li>
-              <li>Track the fix in GitHub issues or grab the patched release when it drops.</li>
-            </ol>
-            <p class="contact-note">Everything stays in public trackers so you can follow along without DMs.</p>
-          </article>
+            <article class="contact-tile">
+              <span class="contact-tag">Platforms</span>
+              <h4>Other channels</h4>
+              <p>Release showcases, sneak peeks, and the public site.</p>
+              <ul class="contact-links">
+                <li>
+                  <a href="https://www.youtube.com/@j3_ddd" target="_blank" rel="noreferrer">
+                    <span class="contact-link-main">YouTube</span>
+                    <span class="contact-link-sub">@j3_ddd</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://bestfreesoftwareco.github.io/" target="_blank" rel="noreferrer">
+                    <span class="contact-link-main">Website</span>
+                    <span class="contact-link-sub">bestfreesoftwareco.github.io</span>
+                  </a>
+                </li>
+              </ul>
+            </article>
+
+            <article class="contact-tile contact-tile--support">
+              <span class="contact-tag">Playbook</span>
+              <h4>Support workflow</h4>
+              <ol class="contact-steps">
+                <li>Open a Discord thread with macro + OS + version.</li>
+                <li>Link the GitHub issue (or we’ll create one for you).</li>
+                <li>Grab the patched release once the issue is closed.</li>
+              </ol>
+              <p class="contact-note">No DMs, no mystery builds — everything is logged where you can see progress.</p>
+            </article>
+          </div>
         </div>
       </div>
     </section>
@@ -501,6 +534,11 @@
       <a class="link" href="#top">Back to top</a>
     </div>
   </footer>
+
+  <div class="mobile-dock" aria-label="Quick actions">
+    <a class="btn primary" href="https://github.com/BestFreeSoftwareCo/Main-Macro-Installer" target="_blank" rel="noreferrer">Download suite</a>
+    <a class="btn ghost" href="https://discord.gg/498tyUUaBw" target="_blank" rel="noreferrer">Discord</a>
+  </div>
 
   <div class="modal" id="projectModal" role="dialog" aria-modal="true" aria-labelledby="projectModalTitle" aria-hidden="true">
     <div class="modal-backdrop" data-modal-close="true"></div>

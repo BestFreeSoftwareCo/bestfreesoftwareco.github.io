@@ -1,4 +1,7 @@
 const THEME_KEY = 'bfs_theme';
+const FILTERS_KEY = 'bfs_projects_filters';
+const ANNOUNCEMENT_KEY = 'bfs_announcement_dismissed';
+const MOBILE_BREAKPOINT = '(max-width: 720px)';
 
 const PROJECT_HIDE = [
   'macro-creator',
@@ -97,6 +100,15 @@ function normalizeTag(tag) {
 
 function uniq(arr) {
   return Array.from(new Set(arr));
+}
+
+function addMqListener(mediaQueryList, handler) {
+  if (!mediaQueryList || typeof handler !== 'function') return;
+  if (typeof mediaQueryList.addEventListener === 'function') {
+    mediaQueryList.addEventListener('change', handler);
+  } else if (typeof mediaQueryList.addListener === 'function') {
+    mediaQueryList.addListener(handler);
+  }
 }
 
 function byStatusOrder(a, b) {
@@ -384,6 +396,36 @@ async function loadAllProjects() {
   return mergeProjects(localProjects, repoProjects);
 }
 
+function readFilterPrefs() {
+  try {
+    const raw = localStorage.getItem(FILTERS_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed === 'object') return parsed;
+    return null;
+  } catch (error) {
+    console.warn('Unable to read filter prefs', error);
+    return null;
+  }
+}
+
+function writeFilterPrefs(state) {
+  try {
+    localStorage.setItem(
+      FILTERS_KEY,
+      JSON.stringify({
+        q: state.q || '',
+        status: state.status || 'all',
+        tag: state.tag || 'all',
+        category: state.category || 'all',
+        sort: state.sort || 'status'
+      })
+    );
+  } catch (error) {
+    console.warn('Unable to persist filter prefs', error);
+  }
+}
+
 function attachProjectsUI(allProjects) {
   const grid = document.getElementById('projectsGrid');
   const search = document.getElementById('projectSearch');
@@ -393,8 +435,23 @@ function attachProjectsUI(allProjects) {
   const clear = document.getElementById('clearFilters');
   const tagFilters = document.getElementById('tagFilters');
   const count = document.getElementById('projectsCount');
+  const toast = document.getElementById('projectsToast');
+  const filtersPanel = document.getElementById('projectsFilters');
+  const filtersToggle = document.getElementById('filtersToggle');
 
-  if (!grid || !search || !status || !clear || !tagFilters || !count || !category || !sortSelect) return;
+  if (
+    !grid ||
+    !search ||
+    !status ||
+    !clear ||
+    !tagFilters ||
+    !count ||
+    !category ||
+    !sortSelect ||
+    !filtersPanel ||
+    !filtersToggle
+  )
+    return;
 
   const projects = allProjects.filter(
     (project) => !shouldHideProject(project.id || project.name)
@@ -413,18 +470,44 @@ function attachProjectsUI(allProjects) {
     tagFilters.appendChild(btn);
   }
 
+  const savedFilters = readFilterPrefs();
   const state = {
-    q: '',
-    status: 'all',
-    tag: 'all',
-    category: 'all',
-    sort: 'status'
+    q: savedFilters?.q || '',
+    status: savedFilters?.status || 'all',
+    tag: savedFilters?.tag || 'all',
+    category: savedFilters?.category || 'all',
+    sort: savedFilters?.sort || 'status'
   };
+
+  search.value = state.q;
+  status.value = state.status;
+  category.value = state.category;
+  sortSelect.value = state.sort;
 
   function setActiveChip(tag) {
     const chips = tagFilters.querySelectorAll('.chip');
     chips.forEach((c) => c.classList.toggle('is-active', c.dataset.tag === tag));
   }
+
+  const mq = window.matchMedia(MOBILE_BREAKPOINT);
+  let filtersOpen = !mq.matches;
+
+  function setFiltersVisibility(isOpen) {
+    filtersOpen = isOpen;
+    filtersPanel.classList.toggle('is-collapsed', !isOpen);
+    filtersToggle.setAttribute('aria-expanded', String(isOpen));
+    filtersToggle.textContent = isOpen ? 'Hide filters' : 'Show filters';
+  }
+
+  setFiltersVisibility(filtersOpen);
+
+  filtersToggle.addEventListener('click', () => {
+    setFiltersVisibility(!filtersOpen);
+  });
+
+  addMqListener(mq, (event) => {
+    setFiltersVisibility(!event.matches);
+  });
 
   function matches(project) {
     const q = state.q.trim().toLowerCase();
@@ -458,10 +541,41 @@ function attachProjectsUI(allProjects) {
     return [...list].sort(byStatusOrder);
   }
 
+  function updateToast(filteredLength) {
+    if (!toast) return;
+    const details = [];
+    if (state.q.trim()) details.push(`search “${state.q.trim()}”`);
+    if (state.status !== 'all') details.push(`status = ${state.status}`);
+    if (state.category !== 'all') details.push(`category = ${state.category}`);
+    if (state.tag !== 'all') details.push(`tag = ${state.tag}`);
+    if (state.sort !== 'status') details.push(`sorted by ${state.sort}`);
+
+    if (!filteredLength) {
+      toast.textContent = 'No projects match those filters. Try clearing or switching tags.';
+      return;
+    }
+
+    toast.textContent = details.length
+      ? `Filtered by ${details.join(', ')}`
+      : 'Showing every public project.';
+  }
+
   function render() {
     const filtered = sortProjects(projects.filter(matches));
-    grid.innerHTML = filtered.map(renderProjectCard).join('');
-    count.textContent = `${filtered.length} / ${projects.length} shown`;
+    if (!filtered.length) {
+      grid.innerHTML = `
+        <article class="project-empty">
+          <h3>No projects found</h3>
+          <p>Adjust your filters or clear them to see the full suite.</p>
+        </article>
+      `;
+    } else {
+      grid.innerHTML = filtered.map(renderProjectCard).join('');
+    }
+
+    count.textContent = `${filtered.length} / ${projects.length} in view`;
+    updateToast(filtered.length);
+    writeFilterPrefs(state);
   }
 
   search.addEventListener('input', () => {
@@ -568,7 +682,7 @@ function attachProjectsUI(allProjects) {
     if (e.key === 'Escape') closeModal();
   });
 
-  setActiveChip('all');
+  setActiveChip(state.tag);
   render();
 }
 
@@ -658,15 +772,18 @@ function enableRevealAnimations() {
   elements.forEach((el) => observer.observe(el));
 }
 
-const POINTER_GLOW_SELECTOR = [
+const POINTER_GLOW_TARGETS = [
   '.btn',
+  '.chip',
   '.project-card',
   '.tile',
   '.about-pane',
   '.about-main',
   '.installer-card',
   '.adv-card',
-  '.contact-item',
+  '.contact-panel',
+  '.contact-tile',
+  '.contact-badge',
   '.meta-card',
   '.point',
   '.testi-card',
@@ -684,7 +801,7 @@ function enablePointerGlow() {
   };
 
   document.addEventListener('pointermove', (event) => {
-    const target = event.target.closest(POINTER_GLOW_SELECTOR);
+    const target = event.target.closest(POINTER_GLOW_TARGETS);
     if (!target) return;
     setPos(target, event);
   });
@@ -692,7 +809,7 @@ function enablePointerGlow() {
   document.addEventListener(
     'pointerout',
     (event) => {
-      const target = event.target.closest(POINTER_GLOW_SELECTOR);
+      const target = event.target.closest(POINTER_GLOW_TARGETS);
       if (!target) return;
       target.style.removeProperty('--mx');
       target.style.removeProperty('--my');
@@ -701,8 +818,84 @@ function enablePointerGlow() {
   );
 }
 
+function enableAnnouncement() {
+  const bar = document.getElementById('announcement');
+  const closeBtn = document.getElementById('announcementClose');
+  if (!bar || !closeBtn) return;
+
+  const dismissed = localStorage.getItem(ANNOUNCEMENT_KEY);
+  if (dismissed === '1') {
+    bar.classList.add('is-hidden');
+    return;
+  }
+
+  closeBtn.addEventListener('click', () => {
+    bar.classList.add('is-hidden');
+    localStorage.setItem(ANNOUNCEMENT_KEY, '1');
+  });
+}
+
+function enableScrollProgress() {
+  const bar = document.getElementById('scrollProgress');
+  if (!bar) return;
+
+  const update = () => {
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const height =
+      document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const progress = height > 0 ? (scrollTop / height) * 100 : 0;
+    bar.style.setProperty('--progress', `${progress}%`);
+  };
+
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+}
+
+function enableSectionSpy() {
+  const navLinks = Array.from(document.querySelectorAll('.nav a[href^="#"]'));
+  if (!navLinks.length) return;
+
+  const sections = navLinks
+    .map((link) => {
+      const id = link.getAttribute('href');
+      const target = document.querySelector(id);
+      return target ? { id, target, link } : null;
+    })
+    .filter(Boolean);
+
+  if (!sections.length) return;
+
+  let activeId = null;
+
+  const setActive = (id) => {
+    if (activeId === id) return;
+    activeId = id;
+    navLinks.forEach((link) => {
+      link.classList.toggle('is-active', link.getAttribute('href') === id);
+    });
+  };
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActive(`#${entry.target.id}`);
+        }
+      });
+    },
+    {
+      rootMargin: '-40% 0px -50% 0px',
+      threshold: 0.25
+    }
+  );
+
+  sections.forEach(({ target }) => observer.observe(target));
+}
+
 (function init() {
-  document.getElementById('year').textContent = new Date().getFullYear();
+  const yearEl = document.getElementById('year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 
   const theme = getInitialTheme();
   setTheme(theme);
@@ -717,12 +910,15 @@ function enablePointerGlow() {
 
   const menuToggle = document.getElementById('menuToggle');
   const primaryNav = document.getElementById('primaryNav');
+  const mobileMq = window.matchMedia(MOBILE_BREAKPOINT);
   if (menuToggle && primaryNav) {
     const closeMenu = () => {
       menuToggle.classList.remove('is-active');
       primaryNav.classList.remove('is-open');
       menuToggle.setAttribute('aria-expanded', 'false');
     };
+
+    const shouldUseMobileNav = () => mobileMq.matches;
 
     menuToggle.addEventListener('click', () => {
       const isOpen = menuToggle.classList.toggle('is-active');
@@ -731,13 +927,13 @@ function enablePointerGlow() {
     });
 
     primaryNav.addEventListener('click', (event) => {
-      if (window.matchMedia('(max-width: 720px)').matches && event.target.closest('a')) {
+      if (shouldUseMobileNav() && event.target.closest('a')) {
         closeMenu();
       }
     });
 
-    window.addEventListener('resize', () => {
-      if (!window.matchMedia('(max-width: 720px)').matches) {
+    addMqListener(mobileMq, (event) => {
+      if (!event.matches) {
         closeMenu();
       }
     });
@@ -746,6 +942,9 @@ function enablePointerGlow() {
   enableSmoothAnchors();
   enableRevealAnimations();
   enablePointerGlow();
+  enableScrollProgress();
+  enableAnnouncement();
+  enableSectionSpy();
 
   loadAllProjects()
     .then((projects) => {
