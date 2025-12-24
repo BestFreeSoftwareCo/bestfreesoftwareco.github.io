@@ -388,105 +388,116 @@
           <p>Reach out where we actually respond — Discord for chat, GitHub for issues, YouTube for walkthroughs.</p>
         </div>
 
-        <div class="contact-grid">
-          <article class="contact-hero">
-            <p class="contact-eyebrow">Support HQ</p>
-            <h3>Discord keeps installs and fixes moving.</h3>
-            <p class="contact-lead">
-              We pin hotfixes, ship release alerts, and troubleshoot live inside the server. One join gives you every macro conversation, status feed, and build note in a single timeline.
+        <div class="contact-shell">
+          <aside class="contact-sidebar">
+            <div class="contact-pill">Primary channel</div>
+            <h3>Discord is the ops room.</h3>
+            <p class="contact-copy">
+              Every macro discussion, hotfix, and installer announcement lands in the server first. Hop in once and you’ll never miss a patch note or workflow tweak again.
             </p>
 
-            <div class="contact-stat-grid">
-              <div class="contact-stat">
-                <span class="contact-stat-label">Response time</span>
-                <span class="contact-stat-value">Under 24h</span>
-                <span class="contact-stat-meta">Mods across time zones</span>
+            <div class="contact-sidebar-stats">
+              <div>
+                <span class="label">Mods online</span>
+                <span class="value">6 regions</span>
               </div>
-              <div class="contact-stat">
-                <span class="contact-stat-label">Status feeds</span>
-                <span class="contact-stat-value">#release-feed</span>
-                <span class="contact-stat-meta">+ #status-board</span>
+              <div>
+                <span class="label">Status feeds</span>
+                <span class="value">#release-feed</span>
               </div>
-              <div class="contact-stat">
-                <span class="contact-stat-label">Coverage</span>
-                <span class="contact-stat-value">Installer + macros</span>
-                <span class="contact-stat-meta">Pinned fixes & scripts</span>
+              <div>
+                <span class="label">Coverage</span>
+                <span class="value">Installer + macros</span>
               </div>
             </div>
 
-            <div class="contact-actions">
+            <div class="contact-sidebar-actions">
               <a class="btn primary" href="https://discord.gg/498tyUUaBw" target="_blank" rel="noreferrer">Join Discord</a>
               <a class="btn ghost" href="https://github.com/BestFreeSoftwareCo/Main-Macro-Installer" target="_blank" rel="noreferrer">Installer repo</a>
             </div>
 
-            <ul class="contact-checklist">
-              <li>Open a thread with macro + OS + version.</li>
-              <li>Drop logs/screens so we can reproduce.</li>
-              <li>We mirror anything serious into GitHub issues.</li>
+            <ul class="contact-sidebar-list">
+              <li>Start a thread with macro, OS, and release.</li>
+              <li>Attach logs or screen captures for faster triage.</li>
+              <li>We mirror critical issues to GitHub for tracking.</li>
             </ul>
-          </article>
+          </aside>
 
-          <div class="contact-side">
-            <article class="contact-card contact-card--channels">
-              <span class="contact-tag">Channels</span>
-              <h4>Pick the lane that fits</h4>
-              <p class="contact-card-lead">Jump into Discord for live help, or follow the public repos if you only need releases.</p>
+          <div class="contact-board">
+            <div class="contact-marquee" aria-live="polite">
+              <span class="contact-marquee-dot" aria-hidden="true"></span>
+              <span class="contact-marquee-label">Status</span>
+              <p class="contact-marquee-text">Forge Auto-Mine v1 patch went live — logs available in #release-feed.</p>
+            </div>
 
-              <div class="contact-channel-grid">
-                <div class="contact-channel">
-                  <div>
-                    <span class="contact-channel-title">Discord</span>
-                    <p>Live troubleshooting, alerts, and install walkthroughs.</p>
-                  </div>
-                  <a class="contact-channel-link" href="https://discord.gg/498tyUUaBw" target="_blank" rel="noreferrer">Join the server →</a>
-                </div>
-                <div class="contact-channel">
-                  <div>
-                    <span class="contact-channel-title">Org GitHub</span>
-                    <p>Issues, releases, and every macro repo.</p>
-                  </div>
-                  <a class="contact-channel-link" href="https://github.com/BestFreeSoftwareCo" target="_blank" rel="noreferrer">@BestFreeSoftwareCo</a>
-                </div>
-                <div class="contact-channel">
-                  <div>
-                    <span class="contact-channel-title">Installer repo</span>
-                    <p>Launcher source, changelog, and nightly notes.</p>
-                  </div>
-                  <a class="contact-channel-link" href="https://github.com/BestFreeSoftwareCo/Main-Macro-Installer" target="_blank" rel="noreferrer">Open repo →</a>
-                </div>
-                <div class="contact-channel">
-                  <div>
-                    <span class="contact-channel-title">All repositories</span>
-                    <p>Browse macro experiments, forks, and utilities.</p>
-                  </div>
-                  <a class="contact-channel-link" href="https://github.com/BestFreeSoftwareCo?tab=repositories" target="_blank" rel="noreferrer">See every project →</a>
-                </div>
-                <div class="contact-channel">
-                  <div>
-                    <span class="contact-channel-title">YouTube</span>
-                    <p>Release demos and setup walkthroughs.</p>
-                  </div>
-                  <a class="contact-channel-link" href="https://www.youtube.com/@j3_ddd" target="_blank" rel="noreferrer">@j3_ddd</a>
-                </div>
-                <div class="contact-channel">
-                  <div>
-                    <span class="contact-channel-title">Website</span>
-                    <p>Public roadmap plus installer highlights.</p>
-                  </div>
-                  <a class="contact-channel-link" href="https://bestfreesoftwareco.github.io/" target="_blank" rel="noreferrer">bestfreesoftwareco.github.io</a>
-                </div>
-              </div>
-            </article>
+            <div class="contact-lanes">
+              <article class="contact-lane">
+                <header>
+                  <span class="contact-lane-tag">Support</span>
+                  <h4>Escalations & hotfixes</h4>
+                </header>
+                <ul class="contact-lane-list">
+                  <li>
+                    <strong>Discord threads</strong>
+                    <span>Live triage, screenshots, and pinned fixes.</span>
+                    <a href="https://discord.gg/498tyUUaBw" target="_blank" rel="noreferrer">Open thread →</a>
+                  </li>
+                  <li>
+                    <strong>Installer releases</strong>
+                    <span>Changelog + download for every macro.</span>
+                    <a href="https://github.com/BestFreeSoftwareCo/Main-Macro-Installer/releases" target="_blank" rel="noreferrer">Latest notes →</a>
+                  </li>
+                </ul>
+              </article>
 
-            <article class="contact-card contact-card--workflow">
+              <article class="contact-lane">
+                <header>
+                  <span class="contact-lane-tag">Builds</span>
+                  <h4>GitHub directory</h4>
+                </header>
+                <ul class="contact-lane-list">
+                  <li>
+                    <strong>Organization profile</strong>
+                    <span>Track issues and roadmap across repos.</span>
+                    <a href="https://github.com/BestFreeSoftwareCo" target="_blank" rel="noreferrer">@BestFreeSoftwareCo</a>
+                  </li>
+                  <li>
+                    <strong>Browse every repo</strong>
+                    <span>Experimental macros, utilities, and forks.</span>
+                    <a href="https://github.com/BestFreeSoftwareCo?tab=repositories" target="_blank" rel="noreferrer">See all projects →</a>
+                  </li>
+                </ul>
+              </article>
+
+              <article class="contact-lane">
+                <header>
+                  <span class="contact-lane-tag">Broadcast</span>
+                  <h4>Walkthroughs & site</h4>
+                </header>
+                <ul class="contact-lane-list">
+                  <li>
+                    <strong>YouTube channel</strong>
+                    <span>Release demos, installer tours, and macro tips.</span>
+                    <a href="https://www.youtube.com/@j3_ddd" target="_blank" rel="noreferrer">@j3_ddd</a>
+                  </li>
+                  <li>
+                    <strong>Public website</strong>
+                    <span>Roadmap, featured macros, and download links.</span>
+                    <a href="https://bestfreesoftwareco.github.io/" target="_blank" rel="noreferrer">bestfreesoftwareco.github.io</a>
+                  </li>
+                </ul>
+              </article>
+            </div>
+
+            <article class="contact-steps-card">
               <span class="contact-tag">Playbook</span>
-              <h4>How support flows</h4>
+              <h4>How a support ticket moves</h4>
               <ol class="contact-steps">
                 <li>Spin up a Discord thread with macro, OS, and version.</li>
-                <li>Link (or let us open) the GitHub issue for tracking.</li>
+                <li>We replicate, log an issue on GitHub, and pin status.</li>
                 <li>Grab the patched release or config once it ships.</li>
               </ol>
-              <p class="contact-note">No DMs, no mystery builds — everything is logged in public so you can follow progress.</p>
+              <p class="contact-note">No side-channel binaries — everything stays public so you can follow progress.</p>
             </article>
           </div>
         </div>
